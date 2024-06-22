@@ -3,9 +3,7 @@ const banned_prefix = ["AASO", "BSC", "ECON", "CS_", "COMP1"];
 selectSem(getYearSem().year, getYearSem().sem);
 sortSideBar(banned_prefix);
 buildCourseButtonsFromSidebar();
-
-// prependButtonToFrontPage("course 1", "https://google.com/");
-// renderCourseButtons(selected_courses);
+clearBody();
 
 
 function sortSideBar(banned_prefix = null) {
@@ -34,24 +32,12 @@ function selectSem(year, sem) {
     return nonDimmedLinks;
 }
 
-function renderCourseButtons(selectedCourses) {
-    const buttonsContainer = document.createElement('div');
-    document.querySelector('.front-page-course-list');
-    buttonsContainer.className = 'd-flex';
-
-    selectedCourses.forEach(course => {
-        const { href, text } = course.querySelector('a');
-        const button = document.createElement('a');
-        button.className = 'btn btn-primary mr-2';
-        button.href = href;
-        button.textContent = text.substring(0, 8);
-        buttonsContainer.appendChild(button);
-    });
-}
-
 function prependButtonContainerToFrontPage(texts, links) {
     const containerDiv = document.createElement('div');
     containerDiv.classList.add('d-flex', 'flex-wrap');
+
+    let headerText = document.createElement('h2');
+    headerText.textContent = 'Quick Navigation Links';
 
     let buttonRow = document.createElement('div');
     buttonRow.classList.add('d-flex', 'mb-2');
@@ -60,7 +46,7 @@ function prependButtonContainerToFrontPage(texts, links) {
     texts.forEach((text, index) => {
         const button = document.createElement('a');
         button.classList.add('btn', 'btn-primary', 'mr-2');
-        button.style.width = '100px';
+        button.style.width = '70px';
         button.href = links[index];
         button.textContent = text.substring(0, 8);
 
@@ -73,16 +59,17 @@ function prependButtonContainerToFrontPage(texts, links) {
         buttonRow.appendChild(button);
     });
 
-    const frontPageCourseListDiv = document.querySelector('#frontpage-course-list');
-    if (frontPageCourseListDiv) {
-        frontPageCourseListDiv.insertBefore(containerDiv, frontPageCourseListDiv.firstChild);
+    var insertLoc = document.querySelector('#frontpage-course-list') || document.querySelector('#page-content');
+    if (insertLoc) {
+        insertLoc.insertBefore(containerDiv, insertLoc.firstChild);
+        insertLoc.insertBefore(headerText, insertLoc.firstChild);
     } else {
         console.error('The <div> with id "frontpage-course-list" was not found.');
     }
 }
 
 function buildCourseButtonsFromSidebar() {
-    const sidebarAnchors = document.querySelectorAll('ul.unlist a');
+    const sidebarAnchors = document.querySelectorAll('.column.c1 a');
     texts = Array.from(sidebarAnchors).map(a => a.textContent);
     links = Array.from(sidebarAnchors).map(a => a.href);
 
@@ -106,5 +93,24 @@ function getYearSem() {
     return {
         year: year,
         sem: sem
+    }
+}
+
+function clearBody() {
+    const headers = document.querySelectorAll('h2');
+    let courseHeader;
+    headers.forEach(h => {
+        if (h.textContent.includes('My courses')) {
+            courseHeader = h;
+        }
+    });
+
+    if (courseHeader) {
+        courseHeader.remove();
+    }
+
+    const enrolledCourseDiv = document.querySelector('.courses.frontpage-course-list-enrolled');
+    if (enrolledCourseDiv) {
+        enrolledCourseDiv.remove();
     }
 }
