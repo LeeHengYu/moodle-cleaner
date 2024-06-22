@@ -1,8 +1,9 @@
 const banned_prefix = ["AASO", "BSC", "ECON", "CS_", "COMP1"];
 
-selected_courses = selectSem(2023, 2);
+selectSem(getYearSem().year, getYearSem().sem);
 sortSideBar(banned_prefix);
 buildCourseButtonsFromSidebar();
+
 // prependButtonToFrontPage("course 1", "https://google.com/");
 // renderCourseButtons(selected_courses);
 
@@ -86,4 +87,24 @@ function buildCourseButtonsFromSidebar() {
     links = Array.from(sidebarAnchors).map(a => a.href);
 
     prependButtonContainerToFrontPage(texts, links);
+}
+
+function getYearSem() {
+    var time = new Date();
+    var year = time.getFullYear();
+    const month = time.getMonth();
+
+    var sem = -1;
+    if (month >= 7 && month <= 11) {
+        sem = 1;
+    }
+    else {
+        sem = 2;
+        year--;
+    }
+
+    return {
+        year: year,
+        sem: sem
+    }
 }
