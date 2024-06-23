@@ -12,6 +12,6 @@
     "host_permissions": [
         "http://*/*",
         "https://*/*",
-        "localhost:*"
+        "http://localhost:*/*"
     ]
 }

@@ -1,42 +1,27 @@
-
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Button, Switch } from "@nextui-org/react";
+import "./App.css";
 
 function App() {
-
   const onClick = async () => {
-    let [tab] = await chrome.tabs.query({active: true});
+    let [tab] = await chrome.tabs.query({ active: true });
     chrome.scripting.executeScript({
-      target: {tabId: tab.id!},
+      target: { tabId: tab.id! },
       func: () => {
-        alert('testing message');
-      }
+        console.log("hello");
+      },
     });
-  }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={onClick} />
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      <Button onClick={onClick} color="primary" className="mx-3">
+        Click Me
+      </Button>
+      <Switch defaultSelected aria-label="Apply" size="md">
+        Apply Filtering
+      </Switch>
+    </div>
+  );
 }
 
-export default App
+export default App;
