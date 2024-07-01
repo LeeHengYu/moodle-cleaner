@@ -21,12 +21,11 @@ const CardComponent = () => {
   );
 
   const keyButtons = (
-    <RadioGroup label={label} onValueChange={setSortKey}>
+    <RadioGroup label={label} onValueChange={setSortKey} value={sortKey}>
       <Radio
         value="code"
         className="text-left"
         description="Sort by course code in alphabetical order"
-        defaultChecked
       >
         <p className="text-white font-serif">Course Code</p>
       </Radio>
