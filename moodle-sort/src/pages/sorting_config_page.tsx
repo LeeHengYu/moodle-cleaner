@@ -15,9 +15,7 @@ const CardComponent = () => {
   const [significance, setSignificance] = useState("");
 
   const label = (
-    <p className="text-white font-semibold flex flex-start text-large">
-      Sort by
-    </p>
+    <p className="text-white flex font-semibold text-xl">Sort by</p>
   );
 
   const keyButtons = (
