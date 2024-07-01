@@ -9,7 +9,7 @@ function App() {
     <div className="min-w-[300px] max-w-[500px] h-full">
       <Tabs
         fullWidth
-        variant="solid"
+        variant="light"
         size="lg"
         aria-label="Tabs form"
         className="h-full"

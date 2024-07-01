@@ -38,7 +38,7 @@ const CardComponent = () => {
       </Radio>
       <Radio value="sig" description="">
         <p className="text-white text-left font-serif">
-          Self-defined significance
+          User-defined significance
         </p>
       </Radio>
     </RadioGroup>
