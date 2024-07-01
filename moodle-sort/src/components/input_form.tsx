@@ -1,4 +1,4 @@
-import { Input } from "@nextui-org/react";
+import { Textarea } from "@nextui-org/react";
 import { Dispatch, SetStateAction } from "react";
 
 interface Props {
@@ -21,16 +21,14 @@ const InputForm = ({ isDisabled, significance, setSignificance }: Props) => {
   return (
     <>
       {description}
-      <Input
+      <Textarea
         label="Prefixes"
-        isClearable
         isReadOnly={isDisabled}
         value={significance}
         onChange={(e) => setSignificance(capitalizeAll(e.target.value))}
         placeholder="e.g. FINA3, ECON, COMP2"
-        size="sm"
-        variant={isDisabled ? "bordered" : "flat"}
-      ></Input>
+        className="w-80"
+      ></Textarea>
     </>
   );
 };
