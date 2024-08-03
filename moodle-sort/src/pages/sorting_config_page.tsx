@@ -2,14 +2,6 @@ import { Radio, RadioGroup } from "@nextui-org/react";
 import { useState } from "react";
 import InputForm from "../components/input_form";
 
-/*
-Sorting
-alphabetical (default)
-by year and sem
-Reverse
-
-self-define value (up to 10 items)
-*/
 const CardComponent = () => {
   const [sortKey, setSortKey] = useState("code");
   const [significance, setSignificance] = useState("");
