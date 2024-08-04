@@ -1,6 +1,6 @@
 import { Tab, Tabs } from "@nextui-org/react";
 import "./App.css";
-import CardComponent from "./pages/sorting_config_page";
+import CardComponent from "./pages/sort";
 import { UserConfiguration } from "./models/configuration";
 
 function App() {
