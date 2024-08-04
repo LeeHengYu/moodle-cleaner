@@ -42,7 +42,7 @@ const FilterPage = ({ config }: Props) => {
   }
 
   return (
-    <div className="flex flex-col gap-3 w-full grow bg-gray-700 h-[350px]">
+    <div className="flex flex-col gap-3 w-full grow bg-gray-700 h-[352px]">
       {label}
       <Input
         type="number"
@@ -64,7 +64,7 @@ const FilterPage = ({ config }: Props) => {
         isDisabled={false}
         value={prefixes}
         setValue={handlePrefixChange}
-        description="Only courses with prefixes:"
+        description="Only courses of the entered prefixes:"
       />
     </div>
   );

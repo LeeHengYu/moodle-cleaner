@@ -52,7 +52,7 @@ const CardComponent = ({ config }: Props) => {
   );
 
   return (
-    <div className="flex flex-col gap-3 w-full h-[350px]">
+    <div className="flex flex-col gap-3 w-full h-[400px]">
       {keyButtons}
       <InputForm
         isDisabled={key !== "user-defined"}
