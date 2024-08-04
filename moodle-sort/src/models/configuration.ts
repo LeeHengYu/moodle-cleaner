@@ -35,15 +35,15 @@ export class FilterParam {
         this.prefixes = prefixes;
     }
 
-    setYear(year: number): void {
+    setYear(year?: number): void {
         this.year = year;
     }
 
-    setSem(sem: number): void {
+    setSem(sem?: number): void {
         this.sem = sem;
     }   
 
-    setPrefixes(prefixes: string): void {
+    setPrefixes(prefixes?: string): void {
         this.prefixes = prefixes;
     }   
 }
@@ -51,7 +51,7 @@ export class FilterParam {
 
 export class UserConfiguration {
     sortingKey: SortingKey;
-    filter?: FilterParam;
+    filter: FilterParam;
     buttonColor?: string; // to be adjusted according to color picker return type
 
     constructor(sortingKey?: SortingKey, filter?: FilterParam) {
@@ -62,9 +62,9 @@ export class UserConfiguration {
         }
 
         if (!filter){    
-            filter = new FilterParam();
+            this.filter = new FilterParam();
         } else {
-            filter = filter;
+            this.filter = filter;
         }
     }
 }
