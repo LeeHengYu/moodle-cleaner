@@ -1,9 +1,13 @@
 import { Tab, Tabs } from "@nextui-org/react";
 import "./App.css";
 import CardComponent from "./pages/sorting_config_page";
+import { UserConfiguration } from "./models/configuration";
 
 function App() {
   const childrenClass = "h-full flex justify-center items-center";
+  const config = new UserConfiguration();
+
+  // TODO: load the state from chrome storage API
 
   return (
     <div className="min-w-[300px] max-w-[500px] h-full">
@@ -16,7 +20,7 @@ function App() {
       >
         <Tab key="sort" title="Sorting">
           <div className={childrenClass}>
-            <CardComponent />
+            <CardComponent config={config} />
           </div>
         </Tab>
         <Tab key="filter" title="Filtering">

@@ -1,15 +1,14 @@
 import { Textarea } from "@nextui-org/react";
-import { Dispatch, SetStateAction } from "react";
 
 interface Props {
   isDisabled: boolean;
-  significance: string;
-  setSignificance: Dispatch<SetStateAction<string>>;
+  significance: string | undefined;
+  setSignificance: (value: string) => void;
 }
 
 const description = (
   <p className="text-white text-medium font-serif text-left text-wrap max-w-[500px]">
-    Priority prefixes from the highest to lowest (up to 10 items).
+    Prefixes from high to low prioirty:
   </p>
 );
 
@@ -22,9 +21,10 @@ const InputForm = ({ isDisabled, significance, setSignificance }: Props) => {
     <>
       {description}
       <Textarea
+        color={isDisabled ? "default" : "primary"}
         label="Prefixes"
         isReadOnly={isDisabled}
-        value={significance}
+        value={significance || ""}
         onChange={(e) => setSignificance(capitalizeAll(e.target.value))}
         placeholder="e.g. FINA3, ECON, COMP2"
         className="w-80"

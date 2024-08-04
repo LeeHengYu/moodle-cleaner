@@ -1,17 +1,21 @@
-class SortingKey {
+export class SortingKey {
     key: string; // 'alphabetical', 'time', 'user-defined'
-    userSignificance?: string[] = [];
+    userSignificance?: string = '';
     reverse: boolean = false; 
 
-    constructor(key: string) {
-        this.key = key;
+    constructor(key?: string) {
+        if (!key) {
+            this.key = 'alphabetical';
+        } else {
+            this.key = key;
+        }
     }
 
     setKey(key: string): void {
         this.key = key;
     }
 
-    setUserSignificance(userSignificance: string[]): void {
+    setUserSignificance(userSignificance: string): void {
         this.userSignificance = userSignificance;
     }
 
@@ -20,7 +24,7 @@ class SortingKey {
     }
 }
 
-class FilterParam {
+export class FilterParam {
     year?: number;
     sem?: number;
     prefixes?: String[]; 
@@ -45,13 +49,18 @@ class FilterParam {
 }
 
 
-class UserConfiguration {
-    static sortingKey: SortingKey;
-    static filter: FilterParam;
-    static buttonColor: string; // to be adjusted according to color picker return type
+export class UserConfiguration {
+    sortingKey: SortingKey;
+    filter?: FilterParam;
+    buttonColor?: string; // to be adjusted according to color picker return type
 
-    constructor(sortingKey: SortingKey, filter?: FilterParam) {
-        sortingKey = sortingKey;
+    constructor(sortingKey?: SortingKey, filter?: FilterParam) {
+        if (sortingKey) {
+            this.sortingKey = sortingKey;
+        } else {
+            this.sortingKey = new SortingKey();
+        }
+
         if (!filter){    
             filter = new FilterParam();
         } else {
