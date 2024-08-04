@@ -13,7 +13,7 @@ function capitalizeAll(str: string): string {
 
 const InputForm = ({ isDisabled, value, setValue, description }: Props) => {
   const upperDescription = (
-    <p className="text-white text-medium font-serif text-left text-wrap max-w-[500px]">
+    <p className="text-black text-medium font-serif text-left text-wrap max-w-[500px]">
       {description}
     </p>
   );

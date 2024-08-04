@@ -3,6 +3,7 @@ import "./App.css";
 import { UserConfiguration } from "./models/configuration";
 import FilterPage from "./pages/filter";
 import CardComponent from "./pages/sort";
+import { SettingPage } from "./pages/setting";
 
 function App() {
   const childrenClass =
@@ -24,6 +25,9 @@ function App() {
         </Tab>
         <Tab key="filter" title="Filtering" className={childrenClass}>
           <FilterPage config={config} />
+        </Tab>
+        <Tab key="setting" title="Setting" className={childrenClass}>
+          <SettingPage />
         </Tab>
       </Tabs>
       <Button color="primary" className="w-full">

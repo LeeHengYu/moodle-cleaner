@@ -8,9 +8,7 @@ interface Props {
 }
 
 const CardComponent = ({ config }: Props) => {
-  const label = (
-    <p className="text-white flex font-semibold text-xl">Sort by</p>
-  );
+  const label = <p className="flex font-semibold text-xl">Sort by</p>;
 
   const [key, setKey] = useState(config.sortingKey.key);
   const [significance, setSignificance] = useState(
@@ -34,19 +32,17 @@ const CardComponent = ({ config }: Props) => {
         className="text-left"
         description="Sort by course code in alphabetical order"
       >
-        <p className="text-white font-serif">Course Code</p>
+        <p className="font-serif">Course Code</p>
       </Radio>
       <Radio
         value="time"
         className="text-left"
         description="Sort by enrolment semester in reverse chronological order"
       >
-        <p className="text-white font-serif">Year/Sem</p>
+        <p className="font-serif">Year/Sem</p>
       </Radio>
       <Radio value="user-defined" description="">
-        <p className="text-white text-left font-serif">
-          User-defined significance
-        </p>
+        <p className="text-left font-serif">User-defined significance</p>
       </Radio>
     </RadioGroup>
   );

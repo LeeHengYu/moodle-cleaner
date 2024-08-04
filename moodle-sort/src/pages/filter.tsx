@@ -9,7 +9,7 @@ interface Props {
 
 const FilterPage = ({ config }: Props) => {
   const label = (
-    <p className="text-white flex font-semibold text-xl">Filters</p>
+    <p className="flex font-semibold text-xl text-black">Filters</p>
   );
   const [year, setYear] = useState(config.filter?.year);
   const [sem, setSem] = useState(config.filter?.sem);
