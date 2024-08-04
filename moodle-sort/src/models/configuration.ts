@@ -27,9 +27,9 @@ export class SortingKey {
 export class FilterParam {
     year?: number;
     sem?: number;
-    prefixes?: String[]; 
+    prefixes?: string; 
 
-    constructor(year?: number, sem?: number, prefixes?: String[]) {
+    constructor(year?: number, sem?: number, prefixes?: string) {
         this.year = year;
         this.sem = sem;
         this.prefixes = prefixes;
@@ -43,7 +43,7 @@ export class FilterParam {
         this.sem = sem;
     }   
 
-    setPrefixes(prefixes: String[]): void {
+    setPrefixes(prefixes: string): void {
         this.prefixes = prefixes;
     }   
 }

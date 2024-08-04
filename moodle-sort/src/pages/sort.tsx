@@ -52,12 +52,13 @@ const CardComponent = ({ config }: Props) => {
   );
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 w-full h-[350px]">
       {keyButtons}
       <InputForm
         isDisabled={key !== "user-defined"}
-        significance={significance}
-        setSignificance={handleSignificanceChange}
+        value={significance}
+        setValue={handleSignificanceChange}
+        description="Prefixes from high to low prioirty:"
       />
     </div>
   );
