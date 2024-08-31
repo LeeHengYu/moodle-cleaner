@@ -1,15 +1,17 @@
-const filtered_prefix = ["COMP", "STAT"];
-const must_contain = ["CUND9003"];
+const filtered_prefix = [];
+const must_contain = [];
 const LOCAL_STORAGE_KEY = "filteredCourses";
 
 init(2024, 1);
 
-function init(year, sem) {
+function init(year = null, sem = null) {
   if (window.location.href.startsWith("https://moodle.hku.hk/")) {
     if (document.getElementById("frontpage-course-list")) {
-      selectSem(year, sem); // Adjust year and semester as needed
+      selectSem(year, sem);
     }
-    createCourseLinksFromLocalStorage();
+    if (year && sem) {
+      createCourseLinksFromLocalStorage();
+    }
   }
 }
 
@@ -53,13 +55,9 @@ function createCourseLinksFromLocalStorage() {
 
 function selectSem(year, sem) {
   const courseContainer = document.getElementById("frontpage-course-list");
-  if (!courseContainer) {
-    console.log("Course container not found.");
-    return;
-  }
+  if (!courseContainer) return;
 
   const headerElement = courseContainer.querySelector("h2");
-
   const courseboxes = Array.from(
     courseContainer.querySelectorAll(".coursebox")
   );
@@ -68,15 +66,32 @@ function selectSem(year, sem) {
     const courseNameElement = coursebox.querySelector(".coursename a");
     if (courseNameElement) {
       const courseText = courseNameElement.textContent;
-      const hasPrefixMatch = filtered_prefix.some((prefix) =>
-        courseText.startsWith(prefix)
-      );
-      const hasYearSemMatch = new RegExp(`Section ${sem}[A-Z]?, ${year}`).test(
-        courseText
-      );
+
+      var hasPrefixMatch;
+      if (filtered_prefix.length == 0) hasPrefixMatch = true;
+      else {
+        hasPrefixMatch = filtered_prefix.some((prefix) =>
+          courseText.startsWith(prefix)
+        );
+      }
+
+      var hasYearSemMatch;
+      if (year && sem) {
+        hasYearSemMatch = new RegExp(`Section ${sem}[A-Z]?, ${year}`).test(
+          courseText
+        );
+      } else if (year && !sem) {
+        hasYearSemMatch = courseText.includes(String(year));
+      } else if (!year && sem) {
+        hasYearSemMatch = new RegExp(`Section ${sem}[A-Z]?`).test(courseText);
+      } else {
+        hasYearSemMatch = true;
+      }
+
       const mustContainThisCourse = must_contain.some((val) =>
         courseText.includes(val)
       );
+
       return (hasPrefixMatch && hasYearSemMatch) || mustContainThisCourse;
     }
     return false;
