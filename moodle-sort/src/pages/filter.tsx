@@ -16,9 +16,13 @@ const FilterPage = ({ config }: Props) => {
   const [prefixes, setPrefixes] = useState(config.filter?.prefixes);
 
   function handleYearChange(v: string) {
-    const year = parseInt(v) || undefined;
-    setYear(year);
-    config.filter?.setYear(parseInt(v));
+    let res = parseInt(v) || undefined;
+    if (res != undefined) {
+      if (res < 2020) {
+        res = 2020;
+      }
+    }
+    setYear(res);
   }
 
   function handleSemChange(v: string) {
@@ -54,7 +58,7 @@ const FilterPage = ({ config }: Props) => {
       />
       <Input
         type="number"
-        size="lg"
+        size="md"
         label="Semester (only 1 or 2)"
         value={sem?.toString() || ""}
         onValueChange={handleSemChange}
@@ -64,7 +68,7 @@ const FilterPage = ({ config }: Props) => {
         isDisabled={false}
         value={prefixes}
         setValue={handlePrefixChange}
-        description="Only courses of the entered prefixes:"
+        description="Show only courses with prefixes"
       />
     </div>
   );
