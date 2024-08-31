@@ -1,16 +1,24 @@
 {
     "manifest_version": 3,
     "name": "Moodle Cleaner",
-    "description": "Base Level Extension",
+    "description": "An extension to improve Moodle UX for quicker and more straight-forward navigation",
     "version": "1.0.0",
     "action": {
         "default_popup": "index.html"
     },
     "permissions": [
         "scripting",
-        "storage"
+        "storage",
+        "activeTab"
     ],
     "host_permissions": [
         "https://moodle.hku.hk/*"
-    ]
+    ],
+    "content_scripts": [
+    {
+      "matches": ["https://moodle.hku.hk/*"],
+      "js": ["sorter.js"],
+      "run_at": "document_idle"
+    }
+  ]
 }
