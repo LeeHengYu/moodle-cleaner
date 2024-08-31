@@ -5,13 +5,11 @@ const LOCAL_STORAGE_KEY = "filteredCourses";
 init(2024, 1);
 
 function init(year = null, sem = null) {
-  if (window.location.href.startsWith("https://moodle.hku.hk/")) {
-    if (document.getElementById("frontpage-course-list")) {
-      selectSem(year, sem);
-    }
-    if (year && sem) {
-      createCourseLinksFromLocalStorage();
-    }
+  if (document.getElementById("frontpage-course-list")) {
+    selectSem(year, sem);
+  }
+  if (year && sem) {
+    createCourseLinksFromLocalStorage();
   }
 }
 
