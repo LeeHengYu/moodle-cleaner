@@ -1,6 +1,6 @@
-const filtered_prefix = [];
-const must_contain = [];
-const LOCAL_STORAGE_KEY = "filteredCourses";
+const filtered_prefix = "COMP; FINA; POLI";
+const must_contain = "CUND9003/Canton; ECON1210 AB/TA";
+const LOCAL_STORAGE_KEY = "saved_courses";
 
 init(2024, 1);
 
@@ -51,7 +51,23 @@ function createCourseLinksFromLocalStorage() {
   });
 }
 
+function parseFilteredPrefix(input) {
+  return input.split(";").map((item) => {
+    return item.trim();
+  });
+}
+
+function parseMustContainString(input) {
+  return input.split(";").map((item) => {
+    const [code, name] = item.trim().split("/");
+    return { code, name };
+  });
+}
+
 function selectSem(year, sem) {
+  const parsedFilteredPrefix = parseFilteredPrefix(filtered_prefix);
+  const parsedMustContain = parseMustContainString(must_contain);
+
   const courseContainer = document.getElementById("frontpage-course-list");
   if (!courseContainer) return;
 
@@ -66,9 +82,9 @@ function selectSem(year, sem) {
       const courseText = courseNameElement.textContent;
 
       var hasPrefixMatch;
-      if (filtered_prefix.length == 0) hasPrefixMatch = true;
+      if (parsedFilteredPrefix.length == 0) hasPrefixMatch = true;
       else {
-        hasPrefixMatch = filtered_prefix.some((prefix) =>
+        hasPrefixMatch = parsedFilteredPrefix.some((prefix) =>
           courseText.startsWith(prefix)
         );
       }
@@ -86,8 +102,8 @@ function selectSem(year, sem) {
         hasYearSemMatch = true;
       }
 
-      const mustContainThisCourse = must_contain.some((val) =>
-        courseText.includes(val)
+      const mustContainThisCourse = parsedMustContain.some((item) =>
+        courseText.includes(item.code)
       );
 
       return (hasPrefixMatch && hasYearSemMatch) || mustContainThisCourse;
@@ -114,8 +130,15 @@ function selectSem(year, sem) {
     const courseLink = coursebox.querySelector(".coursename a");
     const courseText = courseLink.textContent;
     const codeMatch = courseText.match(/([A-Z]{4}\d{4})/);
+    const defaultCode = codeMatch ? codeMatch[1] : "Unknown";
+
+    // Check if this course is in the must_contain list
+    const mustContainItem = parsedMustContain.find((item) =>
+      courseText.includes(item.code)
+    );
+
     return {
-      code: codeMatch ? codeMatch[1] : "Unknown",
+      code: mustContainItem ? mustContainItem.name : defaultCode,
       url: courseLink.href,
     };
   });
