@@ -9,7 +9,16 @@ interface Props {
 
 const FilterPage = ({ config }: Props) => {
   const label = (
-    <p className="flex font-semibold text-xl text-black">Filters</p>
+    <div className="flex justify-between items-center w-full">
+      <p className="font-semibold text-xl text-black">Filters</p>
+      <button
+        onClick={clearYearSem}
+        className="py-1 px-3 text-white rounded-full"
+        aria-label="Clear year and semester"
+      >
+        Clear
+      </button>
+    </div>
   );
   const [year, setYear] = useState(config.filter?.year);
   const [sem, setSem] = useState(config.filter?.sem);
@@ -39,6 +48,11 @@ const FilterPage = ({ config }: Props) => {
       setSem(undefined);
       config.filter?.setSem();
     }
+  }
+
+  function clearYearSem() {
+    setYear(undefined);
+    setSem(undefined);
   }
 
   return (
