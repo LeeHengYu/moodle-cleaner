@@ -1,10 +1,11 @@
 import { Input } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import InputForm from "../components/input_form";
+import { debounce } from "../deboucer";
 
 const FilterPage = () => {
-  const [year, setYear] = useState<number | undefined>();
-  const [sem, setSem] = useState<number | undefined>();
+  const [year, setYear] = useState<number | null>();
+  const [sem, setSem] = useState<number | null>();
   const [prefixes, setPrefixes] = useState<string>("");
   const [mustContain, setMustContain] = useState<string>("");
 
@@ -20,9 +21,20 @@ const FilterPage = () => {
     );
   }, []);
 
-  const saveToStorage = (key: string, value: any) => {
-    chrome.storage.sync.set({ [key]: value });
+  const saveToStorageImmediate = (key: string, value: any): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      chrome.storage.sync.set({ [key]: value }, () => {
+        if (chrome.runtime.lastError) {
+          console.error(`Error saving ${key}:`, chrome.runtime.lastError);
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve();
+        }
+      });
+    });
   };
+
+  const saveToStorage = debounce(saveToStorageImmediate, 300);
 
   const handleYearChange = (v: string) => {
     const res = Math.max(parseInt(v) || 2020, 2020);
@@ -31,14 +43,14 @@ const FilterPage = () => {
   };
 
   const handleSemChange = (v: string) => {
-    const newSem = v ? (parseInt(v) >= 2 ? 2 : 1) : undefined;
+    const newSem = v ? (parseInt(v) >= 2 ? 2 : 1) : null;
     setSem(newSem);
     saveToStorage("sem", newSem);
   };
 
   const clearYearSem = () => {
-    setYear(undefined);
-    setSem(undefined);
+    setYear(null);
+    setSem(null);
     chrome.storage.sync.remove(["year", "sem"]);
   };
 

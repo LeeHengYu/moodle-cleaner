@@ -33,8 +33,6 @@ function saveCoursesToStorage(courses) {
   chrome.storage.sync.set({ [STORAGE_KEY]: courses }, () => {
     if (chrome.runtime.lastError) {
       console.error("Error saving courses:", chrome.runtime.lastError);
-    } else {
-      console.log("Courses saved successfully");
     }
   });
 }
