@@ -44,6 +44,14 @@ The user configuration will be saved to cloud linked to your Google account, and
 
 ![Sample](./sample.png)
 
+# Privacy Policy
+
+The project is open-source so the reviewers or anyone one can see the implementation of the extension.
+
+## What type of data we collected?
+
+The only data that is being used is the course list when the user stays on the Moodle home page, and the data will be handled by converting necessary information to json as the format to be saved. The course data, along with the parameters typed in the popup, will be saved to the cloud storage to create HTML elements, and is not sent to other server for external uses.
+
 # Updates
 
 _Sep. 1_
@@ -56,7 +64,7 @@ HKU ITS removes the side bar navigation hyperlinks to other course pages in all 
 
 ## Progress
 
-The build has been submitted for examination, awaiting approval.
+The build has been submitted for review, awaiting approval.
 
 ## Pull Requests
 
