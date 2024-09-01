@@ -24,7 +24,7 @@ const InputForm = ({
     <>
       {upperDescription}
       <Textarea
-        color={isDisabled ? "default" : "primary"}
+        color="default"
         isReadOnly={isDisabled}
         value={value || ""}
         onChange={(e) => setValue(e.target.value)}

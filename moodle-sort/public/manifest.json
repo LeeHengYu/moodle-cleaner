@@ -7,9 +7,7 @@
         "default_popup": "index.html"
     },
     "permissions": [
-        "scripting",
-        "storage",
-        "activeTab"
+        "storage"
     ],
     "host_permissions": [
         "https://moodle.hku.hk/*"
