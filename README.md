@@ -46,11 +46,19 @@ The user configuration will be saved to cloud linked to your Google account, and
 
 # Privacy Policy
 
-The project is open-source so the reviewers or anyone one can see the implementation of the extension.
+The project is open-source so the reviewers or anyone one can see the implementation.
 
-## What type of data we collected?
+### What type of data we collected?
 
-The only data that is being used is the course list when the user stays on the Moodle home page, and the data will be handled by converting necessary information to json as the format to be saved. The course data, along with the parameters typed in the popup, will be saved to the cloud storage to create HTML elements, and is not sent to other server for external uses.
+The only data that is being used is the course list when the user stays on the Moodle home page, and the data will be handled by converting necessary information to json format to be saved. The course data, along with the parameters typed in the popup, will be saved to the cloud storage to create HTML elements, and will only be saved locally or synced with your Google account.
+
+### Data Sharing & Transfer & Security
+
+Moodle Cleaner does not use user data nor share it to the third parties for unrelated purposes. In fact, there is no method for the developer to fetch the user data.
+
+### Contact Information
+
+If you have any questions, concerns, or feedback regarding the privacy policy or Moodle Cleaner, please contact via [hengyuli901229@gmail.com](mailto:hengyuli901229@gmail.com) or leave your comment on chrome web store or github issue. Your advice is what makes this extension better.
 
 # Updates
 
