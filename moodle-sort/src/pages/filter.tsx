@@ -1,63 +1,69 @@
 import { Input } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputForm from "../components/input_form";
-import { UserConfiguration } from "../models/configuration";
 
-interface Props {
-  config: UserConfiguration;
-}
+const FilterPage = () => {
+  const [year, setYear] = useState<number | undefined>();
+  const [sem, setSem] = useState<number | undefined>();
+  const [prefixes, setPrefixes] = useState<string>("");
+  const [mustContain, setMustContain] = useState<string>("");
 
-const FilterPage = ({ config }: Props) => {
-  const label = (
-    <div className="flex justify-between items-center w-full">
-      <p className="font-semibold text-xl text-black">Filters</p>
-      <button
-        onClick={clearYearSem}
-        className="py-1 px-3 text-white rounded-full"
-        aria-label="Clear year and semester"
-      >
-        Clear
-      </button>
-    </div>
-  );
-  const [year, setYear] = useState(config.filter?.year);
-  const [sem, setSem] = useState(config.filter?.sem);
-  const [prefixes, setPrefixes] = useState(config.filter?.prefixes);
-  const [mustContain, setMustContain] = useState("");
-
-  function handleYearChange(v: string) {
-    let res = parseInt(v) || undefined;
-    if (res != undefined) {
-      if (res < 2020) {
-        res = 2020;
+  useEffect(() => {
+    chrome.storage.sync.get(
+      ["year", "sem", "prefixes", "mustContain"],
+      (result) => {
+        setYear(result.year);
+        setSem(result.sem);
+        setPrefixes(result.prefixes || "");
+        setMustContain(result.mustContain || "");
       }
-    }
+    );
+  }, []);
+
+  const saveToStorage = (key: string, value: any) => {
+    chrome.storage.sync.set({ [key]: value });
+  };
+
+  const handleYearChange = (v: string) => {
+    const res = Math.max(parseInt(v) || 2020, 2020);
     setYear(res);
-  }
+    saveToStorage("year", res);
+  };
 
-  function handleSemChange(v: string) {
-    if (v) {
-      if (v.length > 0 && parseInt(v) >= 2) {
-        setSem(2);
-        config.filter?.setSem(2);
-      } else {
-        setSem(1);
-        config.filter?.setSem(1);
-      }
-    } else {
-      setSem(undefined);
-      config.filter?.setSem();
-    }
-  }
+  const handleSemChange = (v: string) => {
+    const newSem = v ? (parseInt(v) >= 2 ? 2 : 1) : undefined;
+    setSem(newSem);
+    saveToStorage("sem", newSem);
+  };
 
-  function clearYearSem() {
+  const clearYearSem = () => {
     setYear(undefined);
     setSem(undefined);
-  }
+    chrome.storage.sync.remove(["year", "sem"]);
+  };
+
+  const handlePrefixesChange = (v: string) => {
+    setPrefixes(v);
+    saveToStorage("prefixes", v);
+  };
+
+  const handleMustContainChange = (v: string) => {
+    setMustContain(v);
+    saveToStorage("mustContain", v);
+  };
 
   return (
     <div className="flex flex-col gap-3 w-full grow bg-gray-700 h-[352px]">
-      {label}
+      <div className="flex justify-between items-center w-full">
+        <p className="font-semibold text-xl text-black">Filters</p>
+        <button
+          onClick={clearYearSem}
+          className="py-1 px-3 text-white rounded-full"
+          aria-label="Clear year and semester"
+        >
+          Clear
+        </button>
+      </div>
       <Input
         type="number"
         size="md"
@@ -77,14 +83,14 @@ const FilterPage = ({ config }: Props) => {
       <InputForm
         isDisabled={false}
         value={prefixes}
-        setValue={setPrefixes}
+        setValue={handlePrefixesChange}
         description="Show only courses with prefixes"
         placeholder="FINA3; ECON; COMP2"
       />
       <InputForm
         isDisabled={false}
         value={mustContain}
-        setValue={setMustContain}
+        setValue={handleMustContainChange}
         description="Must contain courses with these texts"
         placeholder="CUND9003/Canton; Ditto/NJS; Thirsty/ASP"
       />

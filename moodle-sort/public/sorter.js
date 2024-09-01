@@ -1,71 +1,92 @@
-const filtered_prefix = "comp; stat";
-const must_contain = "CUND9003/Canton; ECON1210 AB/TA";
-const LOCAL_STORAGE_KEY = "saved_courses";
+/* global chrome */
+const STORAGE_KEY = "saved_courses";
 
-init(2024, 1);
+let param_filtered_prefix = "";
+let param_must_contain = "";
+let param_sem = null;
+let param_year = null;
+
+chrome.storage.sync.get(["prefixes", "mustContain", "sem", "year"], (res) => {
+  param_filtered_prefix = res.prefixes || "";
+  param_must_contain = res.mustContain || "";
+
+  if ("year" in res) {
+    param_year = res.year;
+  }
+  if ("sem" in res) {
+    param_sem = res.sem;
+  }
+
+  init(param_year, param_sem);
+});
 
 function init(year = null, sem = null) {
   if (document.getElementById("frontpage-course-list")) {
     selectSem(year, sem);
   }
   if (year && sem) {
-    createCourseLinksFromLocalStorage();
+    createCourseLinksFromStorage();
   }
 }
 
-function saveCoursesToLocalStorage(courses) {
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(courses));
+function saveCoursesToStorage(courses) {
+  chrome.storage.sync.set({ [STORAGE_KEY]: courses }, () => {
+    if (chrome.runtime.lastError) {
+      console.error("Error saving courses:", chrome.runtime.lastError);
+    } else {
+      console.log("Courses saved successfully");
+    }
+  });
 }
 
-function getCoursesFromLocalStorage() {
-  const coursesJson = localStorage.getItem(LOCAL_STORAGE_KEY);
-  return coursesJson ? JSON.parse(coursesJson) : null;
+function getCoursesFromStorage(callback) {
+  chrome.storage.sync.get([STORAGE_KEY], (result) => {
+    callback(result[STORAGE_KEY] || null);
+  });
 }
 
-function createCourseLinksFromLocalStorage() {
-  let courses = getCoursesFromLocalStorage();
+function createCourseLinksFromStorage() {
+  getCoursesFromStorage((courses) => {
+    if (!courses) return;
 
-  if (!courses) return;
+    const navContainer = document.querySelector(".nav.more-nav.navbar-nav");
+    if (!navContainer) return;
 
-  const navContainer = document.querySelector(".nav.more-nav.navbar-nav");
-  if (!navContainer) {
-    console.log("Navigation container not found.");
-    return;
-  }
+    courses.forEach((course) => {
+      const listItem = document.createElement("li");
+      listItem.className = "nav-item";
+      listItem.setAttribute("role", "none");
+      listItem.setAttribute("data-forceintomoremenu", "false");
 
-  courses.forEach((course) => {
-    const listItem = document.createElement("li");
-    listItem.className = "nav-item";
-    listItem.setAttribute("role", "none");
-    listItem.setAttribute("data-forceintomoremenu", "false");
+      const link = document.createElement("a");
+      link.className = "nav-link";
+      link.href = course.url;
+      link.setAttribute("role", "menuitem");
+      link.setAttribute("tabindex", "0");
+      link.textContent = course.code;
 
-    const link = document.createElement("a");
-    link.className = "nav-link";
-    link.href = course.url;
-    link.setAttribute("role", "menuitem");
-    link.setAttribute("tabindex", "0");
-    link.textContent = course.code;
-
-    listItem.appendChild(link);
-    navContainer.appendChild(listItem);
+      listItem.appendChild(link);
+      navContainer.appendChild(listItem);
+    });
   });
 }
 
 function parseFilteredPrefix(input) {
-  return input.split(";").map((item) => {
-    return item.trim();
-  });
+  if (input.trim().length === 0) return [];
+  return input.split(";").map((item) => item.trim().toLowerCase());
 }
 
 function parseMustContainString(input) {
+  if (input.trim().length === 0) return [];
   return input.split(";").map((item) => {
     const [code, name] = item.trim().split("/");
-    return { code, name };
+    return { code: code.toLowerCase(), name };
   });
 }
+
 function selectSem(year, sem) {
-  const parsedFilteredPrefix = parseFilteredPrefix(filtered_prefix);
-  const parsedMustContain = parseMustContainString(must_contain);
+  const parsedFilteredPrefix = parseFilteredPrefix(param_filtered_prefix);
+  const parsedMustContain = parseMustContainString(param_must_contain);
 
   const courseContainer = document.getElementById("frontpage-course-list");
   if (!courseContainer) return;
@@ -78,33 +99,27 @@ function selectSem(year, sem) {
   const filteredCourses = courseboxes.filter((coursebox) => {
     const courseNameElement = coursebox.querySelector(".coursename a");
     if (courseNameElement) {
-      const courseText = courseNameElement.textContent.toLowerCase();
+      const courseText = courseNameElement.textContent;
 
-      var hasPrefixMatch;
-      if (parsedFilteredPrefix.length == 0) hasPrefixMatch = true;
-      else {
-        hasPrefixMatch = parsedFilteredPrefix.some((prefix) =>
-          courseText.startsWith(prefix.toLowerCase())
+      const hasPrefixMatch =
+        parsedFilteredPrefix.length === 0 ||
+        parsedFilteredPrefix.some((prefix) =>
+          courseText.toLowerCase().startsWith(prefix)
         );
-      }
 
-      var hasYearSemMatch;
+      let hasYearSemMatch = true;
       if (year && sem) {
-        hasYearSemMatch = new RegExp(`section ${sem}[a-z]?, ${year}`, "i").test(
-          courseText
-        );
-      } else if (year && !sem) {
+        const regex = new RegExp(`\\[Section ${sem}[A-Z]?, ${year}\\]`);
+        hasYearSemMatch = regex.test(courseText);
+      } else if (year) {
         hasYearSemMatch = courseText.includes(String(year));
-      } else if (!year && sem) {
-        hasYearSemMatch = new RegExp(`section ${sem}[a-z]?`, "i").test(
-          courseText
-        );
-      } else {
-        hasYearSemMatch = true;
+      } else if (sem) {
+        const regex = new RegExp(`\\[Section ${sem}[A-Z]?`);
+        hasYearSemMatch = regex.test(courseText);
       }
 
       const mustContainThisCourse = parsedMustContain.some((item) =>
-        courseText.includes(item.code.toLowerCase())
+        courseText.toLowerCase().includes(item.code)
       );
 
       return (hasPrefixMatch && hasYearSemMatch) || mustContainThisCourse;
@@ -113,8 +128,8 @@ function selectSem(year, sem) {
   });
 
   filteredCourses.sort((a, b) => {
-    const textA = a.querySelector(".coursename a").textContent.toLowerCase();
-    const textB = b.querySelector(".coursename a").textContent.toLowerCase();
+    const textA = a.querySelector(".coursename a").textContent;
+    const textB = b.querySelector(".coursename a").textContent;
     return textA.localeCompare(textB);
   });
 
@@ -130,11 +145,11 @@ function selectSem(year, sem) {
   const resCourses = filteredCourses.map((coursebox) => {
     const courseLink = coursebox.querySelector(".coursename a");
     const courseText = courseLink.textContent;
-    const codeMatch = courseText.match(/([A-Z]{4}\d{4})/i);
+    const codeMatch = courseText.match(/([A-Z]{4}\d{4})/);
     const defaultCode = codeMatch ? codeMatch[1] : "Unknown";
 
     const mustContainItem = parsedMustContain.find((item) =>
-      courseText.toLowerCase().includes(item.code.toLowerCase())
+      courseText.toLowerCase().includes(item.code)
     );
 
     return {
@@ -143,10 +158,8 @@ function selectSem(year, sem) {
     };
   });
 
-  resCourses.sort((a, b) =>
-    a.code.toLowerCase().localeCompare(b.code.toLowerCase())
-  );
-  saveCoursesToLocalStorage(resCourses);
+  resCourses.sort((a, b) => a.code.localeCompare(b.code));
+  saveCoursesToStorage(resCourses);
 
   return filteredCourses;
 }
