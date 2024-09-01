@@ -24,6 +24,7 @@ function init(year = null, sem = null) {
   if (document.getElementById("frontpage-course-list")) {
     selectSem(year, sem);
   }
+  createAboutButton();
   if (year && sem) {
     createCourseLinksFromStorage();
   }
@@ -41,6 +42,31 @@ function getCoursesFromStorage(callback) {
   chrome.storage.sync.get([STORAGE_KEY], (result) => {
     callback(result[STORAGE_KEY] || null);
   });
+}
+
+function createAboutButton() {
+  const navContainer = document.querySelector(".nav.more-nav.navbar-nav");
+  if (!navContainer) return;
+
+  const listItem = document.createElement("li");
+  listItem.className = "nav-item";
+  listItem.setAttribute("role", "none");
+  listItem.setAttribute("data-forceintomoremenu", "false");
+
+  const link = document.createElement("a");
+  link.className = "nav-link";
+  link.href =
+    "https://github.com/LeeHengYu/moodle-cleaner?tab=readme-ov-file#how-to-use-moodle-cleaner";
+  link.setAttribute("role", "menuitem");
+  link.setAttribute("tabindex", "0");
+  link.textContent = "About Moodle Cleaner";
+
+  // Open link in a new tab
+  link.setAttribute("target", "_blank");
+  link.setAttribute("rel", "noopener noreferrer");
+
+  listItem.appendChild(link);
+  navContainer.appendChild(listItem);
 }
 
 function createCourseLinksFromStorage() {
