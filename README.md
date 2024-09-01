@@ -69,3 +69,7 @@ The build has been submitted for review, awaiting approval.
 ## Pull Requests
 
 Welcome
+
+## Your Support
+
+You can choose to make a small donation via [Buy Me a Coffee](https://buymeacoffee.com/hengyuli90j). Your support can help the developer of this extension closer to more NewJeans & aespa concerts in the future!!!!!!
