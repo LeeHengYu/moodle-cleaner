@@ -14,6 +14,7 @@ const FilterPage = ({ config }: Props) => {
   const [year, setYear] = useState(config.filter?.year);
   const [sem, setSem] = useState(config.filter?.sem);
   const [prefixes, setPrefixes] = useState(config.filter?.prefixes);
+  const [mustContain, setMustContain] = useState("");
 
   function handleYearChange(v: string) {
     let res = parseInt(v) || undefined;
@@ -40,17 +41,12 @@ const FilterPage = ({ config }: Props) => {
     }
   }
 
-  function handlePrefixChange(v: string) {
-    setPrefixes(v);
-    config.filter?.setPrefixes(v);
-  }
-
   return (
     <div className="flex flex-col gap-3 w-full grow bg-gray-700 h-[352px]">
       {label}
       <Input
         type="number"
-        size="lg"
+        size="md"
         label="Academic Year"
         value={year?.toString() || ""}
         onValueChange={handleYearChange}
@@ -67,8 +63,16 @@ const FilterPage = ({ config }: Props) => {
       <InputForm
         isDisabled={false}
         value={prefixes}
-        setValue={handlePrefixChange}
+        setValue={setPrefixes}
         description="Show only courses with prefixes"
+        placeholder="FINA3; ECON; COMP2"
+      />
+      <InputForm
+        isDisabled={false}
+        value={mustContain}
+        setValue={setMustContain}
+        description="Must contain courses with these texts"
+        placeholder="CUND9003/Canton; Ditto/NJS; Thirsty/ASP"
       />
     </div>
   );

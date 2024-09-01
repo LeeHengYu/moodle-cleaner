@@ -1,4 +1,4 @@
-const filtered_prefix = "COMP; FINA; POLI";
+const filtered_prefix = "comp; stat";
 const must_contain = "CUND9003/Canton; ECON1210 AB/TA";
 const LOCAL_STORAGE_KEY = "saved_courses";
 
@@ -63,7 +63,6 @@ function parseMustContainString(input) {
     return { code, name };
   });
 }
-
 function selectSem(year, sem) {
   const parsedFilteredPrefix = parseFilteredPrefix(filtered_prefix);
   const parsedMustContain = parseMustContainString(must_contain);
@@ -79,31 +78,33 @@ function selectSem(year, sem) {
   const filteredCourses = courseboxes.filter((coursebox) => {
     const courseNameElement = coursebox.querySelector(".coursename a");
     if (courseNameElement) {
-      const courseText = courseNameElement.textContent;
+      const courseText = courseNameElement.textContent.toLowerCase();
 
       var hasPrefixMatch;
       if (parsedFilteredPrefix.length == 0) hasPrefixMatch = true;
       else {
         hasPrefixMatch = parsedFilteredPrefix.some((prefix) =>
-          courseText.startsWith(prefix)
+          courseText.startsWith(prefix.toLowerCase())
         );
       }
 
       var hasYearSemMatch;
       if (year && sem) {
-        hasYearSemMatch = new RegExp(`Section ${sem}[A-Z]?, ${year}`).test(
+        hasYearSemMatch = new RegExp(`section ${sem}[a-z]?, ${year}`, "i").test(
           courseText
         );
       } else if (year && !sem) {
         hasYearSemMatch = courseText.includes(String(year));
       } else if (!year && sem) {
-        hasYearSemMatch = new RegExp(`Section ${sem}[A-Z]?`).test(courseText);
+        hasYearSemMatch = new RegExp(`section ${sem}[a-z]?`, "i").test(
+          courseText
+        );
       } else {
         hasYearSemMatch = true;
       }
 
       const mustContainThisCourse = parsedMustContain.some((item) =>
-        courseText.includes(item.code)
+        courseText.includes(item.code.toLowerCase())
       );
 
       return (hasPrefixMatch && hasYearSemMatch) || mustContainThisCourse;
@@ -112,8 +113,8 @@ function selectSem(year, sem) {
   });
 
   filteredCourses.sort((a, b) => {
-    const textA = a.querySelector(".coursename a").textContent;
-    const textB = b.querySelector(".coursename a").textContent;
+    const textA = a.querySelector(".coursename a").textContent.toLowerCase();
+    const textB = b.querySelector(".coursename a").textContent.toLowerCase();
     return textA.localeCompare(textB);
   });
 
@@ -129,12 +130,11 @@ function selectSem(year, sem) {
   const resCourses = filteredCourses.map((coursebox) => {
     const courseLink = coursebox.querySelector(".coursename a");
     const courseText = courseLink.textContent;
-    const codeMatch = courseText.match(/([A-Z]{4}\d{4})/);
+    const codeMatch = courseText.match(/([A-Z]{4}\d{4})/i);
     const defaultCode = codeMatch ? codeMatch[1] : "Unknown";
 
-    // Check if this course is in the must_contain list
     const mustContainItem = parsedMustContain.find((item) =>
-      courseText.includes(item.code)
+      courseText.toLowerCase().includes(item.code.toLowerCase())
     );
 
     return {
@@ -143,7 +143,9 @@ function selectSem(year, sem) {
     };
   });
 
-  resCourses.sort((a, b) => a.code.localeCompare(b.code));
+  resCourses.sort((a, b) =>
+    a.code.toLowerCase().localeCompare(b.code.toLowerCase())
+  );
   saveCoursesToLocalStorage(resCourses);
 
   return filteredCourses;

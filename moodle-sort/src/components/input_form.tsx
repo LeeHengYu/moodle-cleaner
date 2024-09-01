@@ -5,13 +5,16 @@ interface Props {
   value: string | undefined;
   setValue: (value: string) => void;
   description?: string;
+  placeholder?: string;
 }
 
-function capitalizeAll(str: string): string {
-  return str.toUpperCase();
-}
-
-const InputForm = ({ isDisabled, value, setValue, description }: Props) => {
+const InputForm = ({
+  isDisabled,
+  value,
+  setValue,
+  description,
+  placeholder,
+}: Props) => {
   const upperDescription = (
     <p className="text-black text-medium font-serif text-left text-wrap max-w-[500px]">
       {description}
@@ -22,13 +25,12 @@ const InputForm = ({ isDisabled, value, setValue, description }: Props) => {
       {upperDescription}
       <Textarea
         color={isDisabled ? "default" : "primary"}
-        label="Prefixes"
         isReadOnly={isDisabled}
         value={value || ""}
-        onChange={(e) => setValue(capitalizeAll(e.target.value))}
-        placeholder="e.g. FINA3, ECON, COMP2"
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={placeholder}
         className="w-80"
-      ></Textarea>
+      />
     </>
   );
 };
