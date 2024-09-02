@@ -42,6 +42,8 @@ If the user provides both year and sem params, corresponding hyperlinks to the f
 
 The user configuration will be saved to cloud linked to your Google account, and will be synced across devices logged in with the same Google account. Therefore even when the user is not logged in with their Moodle account, they can still click on the button => redirect to authenticate => land on the course page they want.
 
+Please be aware that there is a 300ms debouncer for every field in the popup, so please wait a little while for the setting to be saved to the cloud.
+
 ## Screenshots
 
 ![Sample](./sample.png)
