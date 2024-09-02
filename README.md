@@ -32,6 +32,8 @@ User can enter the prefixes they want to see by entering prefixes, delimited by 
 
 User can provide texts (substrings) that exist in the course title, the Cleaner will look for the strings and keep them on the page. Users need to provide a (ideally short) text to as the identifier of the course, which will be used as the text of the navigation button on the nav bar. (See next section for this feature)
 
+For example, if the user typed in "CUND9003/Cantonese", the Cleaner will pick up any course that has CUND9003 in the course title, and the button on top will display "Cantonese" instead of the course code. You can provide more than one condition, delimited by semi-colons (;).
+
 ## Hyperlinks on the nav bar
 
 If the user provides both year and sem params, corresponding hyperlinks to the filtered courses will be rendered on the top nav bar. Whenever users stay on `moodle.hku.hk` webpages, users can directly navigate to other pages without going back to home.
@@ -72,7 +74,7 @@ HKU ITS removes the side bar navigation hyperlinks to other course pages in all 
 
 ## Progress
 
-The build has been submitted for review, awaiting approval.
+v1.0.0 has been published on Sep. 2.
 
 ## Pull Requests
 
