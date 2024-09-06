@@ -76,7 +76,7 @@ HKU ITS removes the side bar navigation hyperlinks to other course pages in all 
 
 ## Progress
 
-v1.0.0 has been published on Sep. 2.
+v1.0.1 released on Sep. 5.
 
 ## Pull Requests
 

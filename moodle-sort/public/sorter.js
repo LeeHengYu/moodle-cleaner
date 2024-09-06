@@ -59,7 +59,7 @@ function createAboutButton() {
     "https://github.com/LeeHengYu/moodle-cleaner?tab=readme-ov-file#how-to-use-moodle-cleaner";
   link.setAttribute("role", "menuitem");
   link.setAttribute("tabindex", "0");
-  link.textContent = "About Moodle Cleaner";
+  link.textContent = "About";
 
   // Open link in a new tab
   link.setAttribute("target", "_blank");
@@ -102,10 +102,13 @@ function parseFilteredPrefix(input) {
 
 function parseMustContainString(input) {
   if (input.trim().length === 0) return [];
-  return input.split(";").map((item) => {
-    const [code, name] = item.trim().split("/");
-    return { code: code.toLowerCase(), name };
-  });
+  return input
+    .split(";")
+    .filter((s) => s.includes("/"))
+    .map((item) => {
+      const [code, name] = item.trim().split("/");
+      return { code: code.toLowerCase(), name };
+    });
 }
 
 function selectSem(year, sem) {
