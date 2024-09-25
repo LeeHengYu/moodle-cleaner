@@ -2,11 +2,13 @@
 
 This project aims to resolve currently terrible UX of HKU Moodle page. Currently there is no method for user to adjust the contents of the page without resorting to JavaScript plug-in.
 
-Some examples include:
+# To-do issues
 
-1. Cannot hide courses of the past semesters.
-2. Cannot change the order of the courses or how they are rendered, and there is no pattern to help users to quickly locate a wanted course as the list is not sorted.
-3. No hyperlinks to other course pages if the user is not at https://moodle.hku.hk. Users have to go back to the root page to select which course to go to.
+1. Some full-year courses should be selected when user provide `year`. The section should be "FA".
+2. Some one-sem courses only has regex pattern `[year]` in course text, considering hinting user to add the course to inclusion list.
+3. Change the year and sem field to drop down lists.
+4. Change the year string representation to full academic year (e.g. 2024-25).
+5. Match year using \<span\> with class name "categoryname".
 
 # How to use Moodle Cleaner?
 
