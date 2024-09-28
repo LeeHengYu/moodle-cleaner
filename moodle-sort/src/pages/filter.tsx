@@ -1,11 +1,17 @@
-import { Input } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@nextui-org/react";
+import { Key, useEffect, useState } from "react";
 import InputForm from "../components/input_form";
 import { debounce } from "../deboucer";
 
 const FilterPage = () => {
-  const [year, setYear] = useState<number | null>();
-  const [sem, setSem] = useState<number | null>();
+  const [year, setYear] = useState<number | null>(null);
+  const [sem, setSem] = useState<number | null>(null);
   const [prefixes, setPrefixes] = useState<string>("");
   const [mustContain, setMustContain] = useState<string>("");
 
@@ -13,8 +19,8 @@ const FilterPage = () => {
     chrome.storage.sync.get(
       ["year", "sem", "prefixes", "mustContain"],
       (result) => {
-        setYear(result.year);
-        setSem(result.sem);
+        setYear(result.year || null);
+        setSem(result.sem || null);
         setPrefixes(result.prefixes || "");
         setMustContain(result.mustContain || "");
       }
@@ -25,27 +31,62 @@ const FilterPage = () => {
     return new Promise((resolve, reject) => {
       chrome.storage.sync.set({ [key]: value }, () => {
         if (chrome.runtime.lastError) {
-          console.error(`Error saving ${key}:`, chrome.runtime.lastError);
           reject(chrome.runtime.lastError);
         } else {
           resolve();
         }
       });
     });
-  };
+  }; // TODO: move to cloud storage helper
 
   const saveToStorage = debounce(saveToStorageImmediate, 300);
 
-  const handleYearChange = (v: string) => {
-    const res = Math.max(parseInt(v) || 2020, 2020);
-    setYear(res);
-    saveToStorage("year", res);
+  const convertYear = (y: number): string => {
+    const endYear = (y + 1).toString().slice(2);
+    return `${y}-${endYear}`;
   };
 
-  const handleSemChange = (v: string) => {
-    const newSem = v ? (parseInt(v) >= 2 ? 2 : 1) : null;
-    setSem(newSem);
-    saveToStorage("sem", newSem);
+  const getAyOptions = (): Array<{ [key: string]: string }> => {
+    const cy = new Date().getFullYear();
+    const cm = new Date().getMonth(); // this returns 0 - 11
+    const ay = cm > 6 ? cy : cy - 1;
+
+    const options: Array<{ key: string; label: string }> = [];
+
+    options.push({
+      key: "all",
+      label: "All",
+    });
+
+    for (let i = 0; i < 3; i++) {
+      const startYear = ay - i;
+      options.push({
+        key: startYear.toString(),
+        label: convertYear(startYear),
+      });
+    }
+
+    return options;
+  };
+
+  const handleYearChange = (selection: Key) => {
+    if (selection == "all") {
+      setYear(null);
+      chrome.storage.sync.remove(["year"]);
+    } else {
+      setYear(Number(selection));
+      saveToStorage("year", Number(selection));
+    }
+  };
+
+  const handleSemChange = (selection: Key) => {
+    if (selection == "all") {
+      setSem(null);
+      chrome.storage.sync.remove(["sem"]);
+    } else {
+      setSem(selection as number);
+      saveToStorage("sem", selection as number);
+    }
   };
 
   const clearYearSem = () => {
@@ -76,22 +117,29 @@ const FilterPage = () => {
           Clear
         </button>
       </div>
-      <Input
-        type="number"
-        size="md"
-        label="Academic Year"
-        value={year?.toString() || ""}
-        onValueChange={handleYearChange}
-        fullWidth
-      />
-      <Input
-        type="number"
-        size="md"
-        label="Semester (only 1 or 2)"
-        value={sem?.toString() || ""}
-        onValueChange={handleSemChange}
-        fullWidth
-      />
+      <Dropdown>
+        <DropdownTrigger>
+          <Button variant="bordered">
+            {typeof year == "number" ? convertYear(year) : "All Years"}
+          </Button>
+        </DropdownTrigger>
+        <DropdownMenu onAction={handleYearChange}>
+          {getAyOptions().map((option) => (
+            <DropdownItem key={option.key}>{option.label}</DropdownItem>
+          ))}
+        </DropdownMenu>
+      </Dropdown>
+      <Dropdown>
+        <DropdownTrigger>
+          <Button variant="bordered">{sem || "All Semesters"}</Button>
+        </DropdownTrigger>
+        <DropdownMenu onAction={handleSemChange}>
+          <DropdownItem key="all">All</DropdownItem>
+          <DropdownItem key={1}>1</DropdownItem>
+          <DropdownItem key={2}>2</DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+
       <InputForm
         isDisabled={false}
         value={prefixes}

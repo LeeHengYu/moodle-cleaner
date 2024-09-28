@@ -6,9 +6,7 @@ This project aims to resolve currently terrible UX of HKU Moodle page. Currently
 
 1. Some full-year courses should be selected when user provide `year`. The section should be "FA".
 2. Some one-sem courses only has regex pattern `[year]` in course text, considering hinting user to add the course to inclusion list.
-3. Change the year and sem field to drop down lists.
-4. Change the year string representation to full academic year (e.g. 2024-25).
-5. Match year using \<span\> with class name "categoryname".
+3. Match year using \<span\> with class name "categoryname".
 
 # How to use Moodle Cleaner?
 
