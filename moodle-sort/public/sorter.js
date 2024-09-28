@@ -135,11 +135,15 @@ function selectSem(year, sem) {
         );
 
       let hasYearSemMatch = true;
+
       if (year && sem) {
         const regex = new RegExp(`\\[Section ${sem}[A-Z]?, ${year}\\]`);
-        hasYearSemMatch = regex.test(courseText);
+        const regexFa = new RegExp(`\\[Section FA, ${year}\\]`);
+        hasYearSemMatch = regex.test(courseText) || regexFa.test(courseText);
       } else if (year) {
-        hasYearSemMatch = courseText.includes(String(year));
+        const regexFa = new RegExp(`\\[Section FA, ${year}\\]`);
+        hasYearSemMatch =
+          courseText.includes(String(year)) || regexFa.test(courseText);
       } else if (sem) {
         const regex = new RegExp(`\\[Section ${sem}[A-Z]?`);
         hasYearSemMatch = regex.test(courseText);
