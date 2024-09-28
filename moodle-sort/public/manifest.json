@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
     "name": "Moodle Cleaner",
-    "description": "To improve HKU Moodle UX for more convenient navigation",
-    "version": "1.0.1",
+    "description": "To improve HKU Moodle UX for more convenient navigation.",
+    "version": "1.0.2",
     "action": {
         "default_popup": "index.html"
     },
