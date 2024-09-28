@@ -4,13 +4,11 @@ This project aims to resolve currently terrible UX of HKU Moodle page. Currently
 
 # To-do issues
 
-1. Some full-year courses should be selected when user provide `year`. The section should be "FA".
-2. Some one-sem courses only has regex pattern `[year]` in course text, considering hinting user to add the course to inclusion list.
-3. Match year using \<span\> with class name "categoryname".
+1. Some one-sem courses only has regex pattern `[year]` in course text, considering hinting user to add the course to inclusion list.
 
 # How to use Moodle Cleaner?
 
-For v1.0.0, Moodle Cleaner provides basic custom filter configurations that fit most use cases.
+For v1.0.\*, Moodle Cleaner provides basic custom filter configurations that fit most use cases.
 
 ## Sorting
 
@@ -22,7 +20,7 @@ User can filter the courses they want to see by providing which (academic) year 
 
 If user only provides `year`, the Cleaner looks for the course text that has `year` inside. For example, if user enters 2024, "COMP3297 Software engineering [Section 1A, 2024]" will be selected.
 
-If user provides both `year` and `sem`, the Cleaner looks for the pattern "Section \<sem\>X, \<year\>" to match. Only semester 1 and 2 are now supported.
+If user provides both `year` and `sem`, the Cleaner looks for the pattern "Section \<sem\>X" or "Section FA" to match. Only semester 1 and 2 are now supported.
 
 ## Filtering by course (title) prefixes
 
@@ -43,10 +41,6 @@ If the user provides both year and sem params, corresponding hyperlinks to the f
 The user configuration will be saved to cloud linked to your Google account, and will be synced across devices logged in with the same Google account. Therefore even when the user is not logged in with their Moodle account, they can still click on the button => redirect to authenticate => land on the course page they want.
 
 Please be aware that there is a 300ms debouncer for every field in the popup, so please wait a little while for the setting to be saved to the cloud.
-
-## Screenshots
-
-![Sample](./sample.png)
 
 # Privacy Policy
 
@@ -76,7 +70,7 @@ HKU ITS removes the side bar navigation hyperlinks to other course pages in all 
 
 ## Progress
 
-v1.0.1 released on Sep. 5.
+v1.0.2 released on Sep. 29 to change the input to dropdown lists.
 
 ## Pull Requests
 

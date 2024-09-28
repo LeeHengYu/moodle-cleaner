@@ -56,12 +56,11 @@ function createAboutButton() {
   const link = document.createElement("a");
   link.className = "nav-link";
   link.href =
-    "https://github.com/LeeHengYu/moodle-cleaner?tab=readme-ov-file#how-to-use-moodle-cleaner";
+    "https://chromewebstore.google.com/detail/moodle-cleaner/nkdagjdaehopkpfaheligcpaigdhdphp";
   link.setAttribute("role", "menuitem");
   link.setAttribute("tabindex", "0");
   link.textContent = "About";
 
-  // Open link in a new tab
   link.setAttribute("target", "_blank");
   link.setAttribute("rel", "noopener noreferrer");
 
@@ -111,6 +110,10 @@ function parseMustContainString(input) {
     });
 }
 
+function convertYear(year) {
+  return `${year}-${(year + 1) % 100}`;
+}
+
 function selectSem(year, sem) {
   const parsedFilteredPrefix = parseFilteredPrefix(param_filtered_prefix);
   const parsedMustContain = parseMustContainString(param_must_contain);
@@ -124,6 +127,11 @@ function selectSem(year, sem) {
   );
 
   const filteredCourses = courseboxes.filter((coursebox) => {
+    function checkYearInSpan() {
+      return Array.from(
+        coursebox.querySelectorAll("span.categoryname.text-truncate")
+      ).some((span) => span.innerText === convertYear(year));
+    }
     const courseNameElement = coursebox.querySelector(".coursename a");
     if (courseNameElement) {
       const courseText = courseNameElement.textContent;
@@ -135,15 +143,17 @@ function selectSem(year, sem) {
         );
 
       let hasYearSemMatch = true;
-
       if (year && sem) {
-        const regex = new RegExp(`\\[Section ${sem}[A-Z]?, ${year}\\]`);
-        const regexFa = new RegExp(`\\[Section FA, ${year}\\]`);
-        hasYearSemMatch = regex.test(courseText) || regexFa.test(courseText);
-      } else if (year) {
-        const regexFa = new RegExp(`\\[Section FA, ${year}\\]`);
+        const regex = new RegExp(`Section ${sem}[A-Z]?`);
+        const regexFa = new RegExp(`Section FA`);
         hasYearSemMatch =
-          courseText.includes(String(year)) || regexFa.test(courseText);
+          (regex.test(courseText) || regexFa.test(courseText)) &&
+          checkYearInSpan();
+      } else if (year) {
+        const regexFa = new RegExp(`Section FA`);
+        hasYearSemMatch =
+          (courseText.includes(String(year)) || regexFa.test(courseText)) &&
+          checkYearInSpan();
       } else if (sem) {
         const regex = new RegExp(`\\[Section ${sem}[A-Z]?`);
         hasYearSemMatch = regex.test(courseText);
