@@ -7,7 +7,14 @@ import {
 } from "@nextui-org/react";
 import { Key, useEffect, useState } from "react";
 import InputForm from "../components/input_form";
-import { debounce } from "../deboucer";
+import {
+  getAllStorageKeys,
+  STORAGE_KEY_FILTER_PREFIX,
+  STORAGE_KEY_MUST_CONTAIN,
+  STORAGE_KEY_SEM,
+  STORAGE_KEY_YEAR,
+} from "../constants/storage_key";
+import { initStateFromCloud, saveToStorage } from "../storage/cloud";
 
 const FilterPage = () => {
   const [year, setYear] = useState<number | null>(null);
@@ -16,30 +23,13 @@ const FilterPage = () => {
   const [mustContain, setMustContain] = useState<string>("");
 
   useEffect(() => {
-    chrome.storage.sync.get(
-      ["year", "sem", "prefixes", "mustContain"],
-      (result) => {
-        setYear(result.year || null);
-        setSem(result.sem || null);
-        setPrefixes(result.prefixes || "");
-        setMustContain(result.mustContain || "");
-      }
-    );
-  }, []);
-
-  const saveToStorageImmediate = (key: string, value: any): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      chrome.storage.sync.set({ [key]: value }, () => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
-        } else {
-          resolve();
-        }
-      });
+    initStateFromCloud((result) => {
+      setYear(result.year || null);
+      setSem(result.sem || null);
+      setPrefixes(result.prefixes || "");
+      setMustContain(result.mustContain || "");
     });
-  }; // TODO: move to cloud storage helper
-
-  const saveToStorage = debounce(saveToStorageImmediate, 300);
+  }, []);
 
   const convertYear = (y: number): string => {
     const endYear = (y + 1).toString().slice(2);
@@ -72,37 +62,39 @@ const FilterPage = () => {
   const handleYearChange = (selection: Key) => {
     if (selection == "all") {
       setYear(null);
-      chrome.storage.sync.remove(["year"]);
+      chrome.storage.sync.remove([STORAGE_KEY_YEAR]);
     } else {
       setYear(Number(selection));
-      saveToStorage("year", Number(selection));
+      saveToStorage(STORAGE_KEY_YEAR, Number(selection));
     }
   };
 
   const handleSemChange = (selection: Key) => {
     if (selection == "all") {
       setSem(null);
-      chrome.storage.sync.remove(["sem"]);
+      chrome.storage.sync.remove([STORAGE_KEY_SEM]);
     } else {
       setSem(selection as number);
-      saveToStorage("sem", selection as number);
+      saveToStorage(STORAGE_KEY_SEM, selection as number);
     }
   };
 
-  const clearYearSem = () => {
+  const clearAll = () => {
     setYear(null);
     setSem(null);
-    chrome.storage.sync.remove(["year", "sem"]);
+    setPrefixes("");
+    setMustContain("");
+    chrome.storage.sync.remove(getAllStorageKeys());
   };
 
   const handlePrefixesChange = (v: string) => {
     setPrefixes(v);
-    saveToStorage("prefixes", v);
+    saveToStorage(STORAGE_KEY_FILTER_PREFIX, v);
   };
 
   const handleMustContainChange = (v: string) => {
     setMustContain(v);
-    saveToStorage("mustContain", v);
+    saveToStorage(STORAGE_KEY_MUST_CONTAIN, v);
   };
 
   return (
@@ -110,11 +102,11 @@ const FilterPage = () => {
       <div className="flex justify-between items-center w-full">
         <p className="font-semibold text-xl text-black">Filters</p>
         <button
-          onClick={clearYearSem}
+          onClick={clearAll}
           className="py-1 px-3 text-white rounded-full"
           aria-label="Clear year and semester"
         >
-          Clear
+          Clear All
         </button>
       </div>
       <Dropdown>
@@ -152,7 +144,7 @@ const FilterPage = () => {
         value={mustContain}
         setValue={handleMustContainChange}
         description="Must contain courses with these texts"
-        placeholder="CUND9003/Canton; Ditto/NJS; Thirsty/ASP"
+        placeholder="ECON1210/micro; Ditto/nj; Live My Life/aespa"
       />
     </div>
   );

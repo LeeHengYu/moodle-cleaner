@@ -9,11 +9,11 @@ interface Props {
 }
 
 const InputForm = ({
-  isDisabled,
-  value,
-  setValue,
   description,
+  isDisabled,
   placeholder,
+  setValue,
+  value,
 }: Props) => {
   const upperDescription = (
     <p className="text-black text-medium font-serif text-left text-wrap max-w-[500px]">
