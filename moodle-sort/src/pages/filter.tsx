@@ -136,15 +136,15 @@ const FilterPage = () => {
         isDisabled={false}
         value={prefixes}
         setValue={handlePrefixesChange}
-        description="Show only courses with prefixes"
+        description="Show only courses with prefixes (delimited by ;)"
         placeholder="FINA3; ECON; COMP2"
       />
       <InputForm
         isDisabled={false}
         value={mustContain}
         setValue={handleMustContainChange}
-        description="Must contain courses with these texts"
-        placeholder="ECON1210/micro; Ditto/nj; Live My Life/aespa"
+        description="Must contain courses with texts (text/course alias, delimited by ;)"
+        placeholder="ECON1210/micro; Ditto/nj; Live My Life/asp"
       />
     </div>
   );
