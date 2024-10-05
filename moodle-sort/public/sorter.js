@@ -48,6 +48,8 @@ function createAboutButton() {
   const navContainer = document.querySelector(".nav.more-nav.navbar-nav");
   if (!navContainer) return;
 
+  navContainer.innerHTML = "";
+
   const listItem = document.createElement("li");
   listItem.className = "nav-item";
   listItem.setAttribute("role", "none");
