@@ -16,7 +16,11 @@ import {
 } from "../constants/storage_key";
 import { initStateFromCloud, saveToStorage } from "../storage/cloud";
 
-const FilterPage = () => {
+interface Props {
+  nextPage: () => void;
+}
+
+const FilterPage = ({ nextPage }: Props) => {
   const [year, setYear] = useState<number | null>(null);
   const [sem, setSem] = useState<number | null>(null);
   const [prefixes, setPrefixes] = useState<string>("");
@@ -38,15 +42,15 @@ const FilterPage = () => {
 
   const getAyOptions = (): Array<{ [key: string]: string }> => {
     const cy = new Date().getFullYear();
-    const cm = new Date().getMonth(); // this returns 0 - 11
+    const cm = new Date().getMonth(); // returns 0 - 11
     const ay = cm > 6 ? cy : cy - 1;
 
-    const options: Array<{ key: string; label: string }> = [];
-
-    options.push({
-      key: "all",
-      label: "All",
-    });
+    const options: Array<{ key: string; label: string }> = [
+      {
+        key: "all",
+        label: "All",
+      },
+    ];
 
     for (let i = 0; i < 3; i++) {
       const startYear = ay - i;
@@ -100,13 +104,20 @@ const FilterPage = () => {
   return (
     <div className="flex flex-col gap-3 w-full grow bg-gray-700 h-[352px]">
       <div className="flex justify-between items-center w-full">
-        <p className="font-semibold text-xl text-black">Filters</p>
+        <p className="font-semibold text-xl text-black">Filter</p>
         <button
           onClick={clearAll}
           className="py-1 px-3 text-white rounded-full"
-          aria-label="Clear year and semester"
+          aria-label="Clear all"
         >
           Clear All
+        </button>
+        <button
+          onClick={nextPage}
+          className="py-1 px-3 text-white rounded-full"
+          aria-label="next-page"
+        >
+          Next Page
         </button>
       </div>
       <Dropdown>
@@ -144,7 +155,7 @@ const FilterPage = () => {
         value={mustContain}
         setValue={handleMustContainChange}
         description="Must contain courses with texts (text/course alias, delimited by ;)"
-        placeholder="ECON1210/micro; Ditto/nj; Live My Life/asp"
+        placeholder="ECON1210/microecon; Ditto/nj; Whiplash/asp"
       />
     </div>
   );
