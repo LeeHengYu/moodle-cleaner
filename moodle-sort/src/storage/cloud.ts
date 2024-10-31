@@ -1,10 +1,21 @@
-import { getAllStorageKeys } from "../constants/storage_key";
 import { debounce } from "../deboucer";
+
+export const STORAGE_KEY_YEAR = "year";
+export const STORAGE_KEY_SEM = "sem";
+export const STORAGE_KEY_FILTER_PREFIX = "prefixes";
+export const STORAGE_KEY_MUST_CONTAIN = "mustContain";
+
+export const storageKeys = [
+  STORAGE_KEY_YEAR,
+  STORAGE_KEY_SEM,
+  STORAGE_KEY_FILTER_PREFIX,
+  STORAGE_KEY_MUST_CONTAIN,
+];
 
 export const initFliterStateFromCloud = (
   callback: (result: Record<string, any>) => void
 ) => {
-  chrome.storage.sync.get(getAllStorageKeys(), (result) => {
+  chrome.storage.sync.get(storageKeys, (result) => {
     callback(result);
   });
 };

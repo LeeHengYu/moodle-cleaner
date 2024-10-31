@@ -8,13 +8,14 @@ import {
 import { Key, useEffect, useState } from "react";
 import InputForm from "../components/input_form";
 import {
-  getAllStorageKeys,
+  initFliterStateFromCloud,
+  saveParamToCloud,
   STORAGE_KEY_FILTER_PREFIX,
   STORAGE_KEY_MUST_CONTAIN,
   STORAGE_KEY_SEM,
   STORAGE_KEY_YEAR,
-} from "../constants/storage_key";
-import { initFliterStateFromCloud, saveParamToCloud } from "../storage/cloud";
+  storageKeys,
+} from "../storage/cloud";
 
 interface Props {
   nextPage: () => void;
@@ -89,7 +90,7 @@ const FilterPage = ({ nextPage, isCoursePage }: Props) => {
     setSem(null);
     setPrefixes("");
     setMustContain("");
-    chrome.storage.sync.remove(getAllStorageKeys());
+    chrome.storage.sync.remove(storageKeys);
   };
 
   const handlePrefixesChange = (v: string) => {

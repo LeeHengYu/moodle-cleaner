@@ -89,6 +89,7 @@ function createCourseLinksFromStorage() {
       link.setAttribute("role", "menuitem");
       link.setAttribute("tabindex", "0");
       link.textContent = course.code;
+      link.style.color = "black";
 
       listItem.appendChild(link);
       navContainer.appendChild(listItem);
