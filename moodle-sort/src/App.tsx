@@ -21,7 +21,7 @@ function App() {
 
   return (
     <div className="flex flex-col w-[400px]">
-      {currentPage == 1 || courseId == -1 ? (
+      {currentPage == 0 || courseId == -1 ? (
         <FilterPage nextPage={nextPage} isCoursePage={courseId != -1} />
       ) : (
         <CourseNotePage nextPage={nextPage} courseId={courseId} />
