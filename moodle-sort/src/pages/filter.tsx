@@ -18,9 +18,10 @@ import { initStateFromCloud, saveToStorage } from "../storage/cloud";
 
 interface Props {
   nextPage: () => void;
+  isCoursePage: boolean;
 }
 
-const FilterPage = ({ nextPage }: Props) => {
+const FilterPage = ({ nextPage, isCoursePage }: Props) => {
   const [year, setYear] = useState<number | null>(null);
   const [sem, setSem] = useState<number | null>(null);
   const [prefixes, setPrefixes] = useState<string>("");
@@ -112,13 +113,16 @@ const FilterPage = ({ nextPage }: Props) => {
         >
           Clear All
         </button>
-        <button
-          onClick={nextPage}
-          className="py-1 px-3 text-white rounded-full"
-          aria-label="next-page"
-        >
-          Next Page
-        </button>
+        {isCoursePage && (
+          <button
+            onClick={nextPage}
+            className="py-1 px-3 text-white rounded-full"
+            aria-label="next-page"
+            disabled={!isCoursePage}
+          >
+            Note
+          </button>
+        )}
       </div>
       <Dropdown>
         <DropdownTrigger>
@@ -144,14 +148,12 @@ const FilterPage = ({ nextPage }: Props) => {
       </Dropdown>
 
       <InputForm
-        isDisabled={false}
         value={prefixes}
         setValue={handlePrefixesChange}
         description="Show only courses with prefixes (delimited by ;)"
         placeholder="FINA3; ECON; COMP2"
       />
       <InputForm
-        isDisabled={false}
         value={mustContain}
         setValue={handleMustContainChange}
         description="Must contain courses with texts (text/course alias, delimited by ;)"
