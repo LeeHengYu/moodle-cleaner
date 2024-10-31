@@ -1,3 +1,5 @@
+// from GPT of generic data type
+
 export const debounce = <F extends (...args: any[]) => any>(
   func: F,
   waitFor: number

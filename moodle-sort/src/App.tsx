@@ -24,7 +24,7 @@ function App() {
       {currentPage == 1 || courseId == -1 ? (
         <FilterPage nextPage={nextPage} isCoursePage={courseId != -1} />
       ) : (
-        <CourseNotePage nextPage={nextPage} isCoursePage={courseId != -1} />
+        <CourseNotePage nextPage={nextPage} courseId={courseId} />
       )}
     </div>
   );

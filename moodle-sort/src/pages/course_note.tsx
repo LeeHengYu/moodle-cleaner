@@ -1,13 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputForm from "../components/input_form";
+import {
+  getCourseNoteFromCloud,
+  saveCourseNoteToCloud,
+} from "../storage/cloud";
 
 interface Props {
   nextPage: () => void;
-  isCoursePage: boolean;
+  courseId: number;
 }
 
-const CourseNotePage = ({ nextPage, isCoursePage }: Props) => {
+const CourseNotePage = ({ nextPage, courseId }: Props) => {
   const [input, setInput] = useState<string>("");
+
+  const handleInputChange = (v: string) => {
+    setInput(v);
+    saveCourseNoteToCloud(courseId, v);
+  };
+
+  useEffect(() => {
+    if (courseId !== -1) {
+      getCourseNoteFromCloud(courseId, (note) => {
+        if (note !== null) {
+          setInput(note);
+        }
+      });
+    }
+  }, [courseId]);
 
   return (
     <div className="flex flex-col gap-3 w-full grow bg-gray-700 h-[352px]">
@@ -21,19 +40,16 @@ const CourseNotePage = ({ nextPage, isCoursePage }: Props) => {
           Filters
         </button>
       </div>
-      {!isCoursePage ? (
+      {courseId === -1 ? (
         <p className="font-bold font-serif text-xl text-black">
           This is not a course page.
         </p>
       ) : (
         <InputForm
           value={input}
-          setValue={setInput}
-          description="Notes specific to the current course"
-          placeholder={`
-        Todo:
-        Assignment 1
-        `}
+          setValue={handleInputChange}
+          description="Notes specific to the active course"
+          placeholder={`Todo:\nAssignment1`}
         />
       )}
     </div>

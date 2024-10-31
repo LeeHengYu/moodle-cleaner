@@ -14,7 +14,7 @@ import {
   STORAGE_KEY_SEM,
   STORAGE_KEY_YEAR,
 } from "../constants/storage_key";
-import { initStateFromCloud, saveToStorage } from "../storage/cloud";
+import { initFliterStateFromCloud, saveParamToCloud } from "../storage/cloud";
 
 interface Props {
   nextPage: () => void;
@@ -28,7 +28,7 @@ const FilterPage = ({ nextPage, isCoursePage }: Props) => {
   const [mustContain, setMustContain] = useState<string>("");
 
   useEffect(() => {
-    initStateFromCloud((result) => {
+    initFliterStateFromCloud((result) => {
       setYear(result.year || null);
       setSem(result.sem || null);
       setPrefixes(result.prefixes || "");
@@ -70,7 +70,7 @@ const FilterPage = ({ nextPage, isCoursePage }: Props) => {
       chrome.storage.sync.remove([STORAGE_KEY_YEAR]);
     } else {
       setYear(Number(selection));
-      saveToStorage(STORAGE_KEY_YEAR, Number(selection));
+      saveParamToCloud(STORAGE_KEY_YEAR, Number(selection));
     }
   };
 
@@ -80,7 +80,7 @@ const FilterPage = ({ nextPage, isCoursePage }: Props) => {
       chrome.storage.sync.remove([STORAGE_KEY_SEM]);
     } else {
       setSem(selection as number);
-      saveToStorage(STORAGE_KEY_SEM, selection as number);
+      saveParamToCloud(STORAGE_KEY_SEM, selection as number);
     }
   };
 
@@ -94,12 +94,12 @@ const FilterPage = ({ nextPage, isCoursePage }: Props) => {
 
   const handlePrefixesChange = (v: string) => {
     setPrefixes(v);
-    saveToStorage(STORAGE_KEY_FILTER_PREFIX, v);
+    saveParamToCloud(STORAGE_KEY_FILTER_PREFIX, v);
   };
 
   const handleMustContainChange = (v: string) => {
     setMustContain(v);
-    saveToStorage(STORAGE_KEY_MUST_CONTAIN, v);
+    saveParamToCloud(STORAGE_KEY_MUST_CONTAIN, v);
   };
 
   return (
