@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import FilterPage from "./pages/filter";
+import CourseNotePage from "./pages/course_note";
 
 function App() {
   const pages = ["filter", "course_note"];
@@ -11,7 +12,11 @@ function App() {
   };
   return (
     <div className="flex flex-col w-[400px]">
-      <FilterPage nextPage={nextPage} />
+      {currentPage == 0 ? (
+        <FilterPage nextPage={nextPage} />
+      ) : (
+        <CourseNotePage nextPage={nextPage} />
+      )}
     </div>
   );
 }
