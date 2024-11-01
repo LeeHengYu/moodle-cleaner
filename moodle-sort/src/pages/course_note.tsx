@@ -21,9 +21,7 @@ const CourseNotePage = ({ nextPage, courseId }: Props) => {
   useEffect(() => {
     if (courseId !== -1) {
       getCourseNoteFromCloud(courseId, (note) => {
-        if (note !== null) {
-          setInput(note);
-        }
+        setInput(note);
       });
     }
   }, [courseId]);

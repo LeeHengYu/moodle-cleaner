@@ -55,15 +55,14 @@ export const saveCourseNoteToCloud = debounce(
 
 export const getCourseNoteFromCloud = (
   courseId: number,
-  callback: (result: string | null) => void
+  callback: (result: string) => void
 ) => {
   const key = `course_note_${courseId}`;
   chrome.storage.sync.get([key], (result) => {
     if (chrome.runtime.lastError) {
       console.error("Error retrieving course note:", chrome.runtime.lastError);
-      callback(null);
     } else {
-      callback(result[key] ?? null);
+      if (result !== null) callback(result[key] ?? null);
     }
   });
 };
