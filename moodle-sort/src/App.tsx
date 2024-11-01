@@ -3,6 +3,7 @@ import "./App.css";
 import FilterPage from "./pages/filter";
 import CourseNotePage from "./pages/course_note";
 import { getCourseIdFromBroswer } from "./browser/tab";
+import { CourseIdContext } from "./contexts/courseId";
 
 function App() {
   const pages = ["filter", "course_note"];
@@ -20,13 +21,15 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col w-[400px]">
-      {currentPage == 0 || courseId == -1 ? (
-        <FilterPage nextPage={nextPage} isCoursePage={courseId != -1} />
-      ) : (
-        <CourseNotePage nextPage={nextPage} courseId={courseId} />
-      )}
-    </div>
+    <CourseIdContext.Provider value={courseId}>
+      <div className="flex flex-col w-[400px]">
+        {currentPage == 0 || courseId == -1 ? (
+          <FilterPage nextPage={nextPage} />
+        ) : (
+          <CourseNotePage nextPage={nextPage} />
+        )}
+      </div>
+    </CourseIdContext.Provider>
   );
 }
 

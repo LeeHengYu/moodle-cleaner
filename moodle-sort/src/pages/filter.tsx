@@ -16,17 +16,19 @@ import {
   STORAGE_KEY_YEAR,
   storageKeys,
 } from "../storage/cloud";
+import { useCourseIdContext } from "../contexts/courseId";
 
 interface Props {
   nextPage: () => void;
-  isCoursePage: boolean;
 }
 
-const FilterPage = ({ nextPage, isCoursePage }: Props) => {
+const FilterPage = ({ nextPage }: Props) => {
   const [year, setYear] = useState<number | null>(null);
   const [sem, setSem] = useState<number | null>(null);
   const [prefixes, setPrefixes] = useState<string>("");
   const [mustContain, setMustContain] = useState<string>("");
+
+  const courseId = useCourseIdContext();
 
   useEffect(() => {
     initFliterStateFromCloud((result) => {
@@ -114,12 +116,11 @@ const FilterPage = ({ nextPage, isCoursePage }: Props) => {
         >
           Clear All
         </button>
-        {isCoursePage && (
+        {courseId !== -1 && (
           <button
             onClick={nextPage}
             className="py-1 px-3 text-white rounded-full"
             aria-label="next-page"
-            disabled={!isCoursePage}
           >
             Note
           </button>

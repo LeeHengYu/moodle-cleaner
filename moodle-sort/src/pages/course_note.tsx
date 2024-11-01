@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import InputForm from "../components/input_form";
+import { useCourseIdContext } from "../contexts/courseId";
 import {
   getCourseNoteFromCloud,
   saveCourseNoteToCloud,
@@ -7,11 +8,11 @@ import {
 
 interface Props {
   nextPage: () => void;
-  courseId: number;
 }
 
-const CourseNotePage = ({ nextPage, courseId }: Props) => {
+const CourseNotePage = ({ nextPage }: Props) => {
   const [input, setInput] = useState<string>("");
+  const courseId = useCourseIdContext();
 
   const handleInputChange = (v: string) => {
     setInput(v);
@@ -19,11 +20,9 @@ const CourseNotePage = ({ nextPage, courseId }: Props) => {
   };
 
   useEffect(() => {
-    if (courseId !== -1) {
-      getCourseNoteFromCloud(courseId, (note) => {
-        setInput(note);
-      });
-    }
+    getCourseNoteFromCloud(courseId, (note) => {
+      setInput(note);
+    });
   }, [courseId]);
 
   return (
