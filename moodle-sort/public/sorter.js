@@ -86,10 +86,10 @@ function createCourseLinksFromStorage() {
       const link = document.createElement("a");
       link.className = "nav-link";
       link.href = course.url;
+      link.style.color = "#000000 !important";
       link.setAttribute("role", "menuitem");
-      link.setAttribute("tabindex", "0");
+      link.setAttribute("tabindex", -1);
       link.textContent = course.code;
-      link.style.color = "black";
 
       listItem.appendChild(link);
       navContainer.appendChild(listItem);

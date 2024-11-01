@@ -35,7 +35,7 @@ const FilterPage = ({ nextPage, isCoursePage }: Props) => {
       setPrefixes(result.prefixes || "");
       setMustContain(result.mustContain || "");
     });
-  }, []);
+  }, []); // wrap them into zustand
 
   const convertYear = (y: number): string => {
     const endYear = (y + 1).toString().slice(2);
