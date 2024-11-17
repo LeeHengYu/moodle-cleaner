@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import FilterPage from "./pages/filter";
-import CourseNotePage from "./pages/course_note";
 import { getCourseIdFromBroswer } from "./browser/tab";
 import { CourseIdContext } from "./contexts/courseId";
 import AddLinkPage from "./pages/add_link";
+import CourseNotePage from "./pages/course_note";
+import FilterPage from "./pages/filter";
+import { initializeUserId } from "./service/user_id";
 
 function App() {
   const NUMBER_OF_PAGE = 3;
   const [courseId, setCourseId] = useState<number>(-1);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [, setUserId] = useState<string>("");
 
   useEffect(() => {
     getCourseIdFromBroswer().then((id) => {
@@ -37,6 +39,8 @@ function App() {
         return <div>Error Loading Extension...</div>;
     }
   };
+
+  initializeUserId().then((id) => setUserId(id));
 
   return (
     <CourseIdContext.Provider value={courseId}>
