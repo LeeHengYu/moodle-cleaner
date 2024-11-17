@@ -34,7 +34,7 @@ const CourseNotePage = ({ nextPage }: Props) => {
           className="py-1 px-3 text-white rounded-full"
           aria-label="next-page"
         >
-          Filters
+          Links
         </button>
       </div>
       {courseId === -1 ? (

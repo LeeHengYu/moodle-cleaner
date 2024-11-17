@@ -116,15 +116,13 @@ const FilterPage = ({ nextPage }: Props) => {
         >
           Clear All
         </button>
-        {courseId !== -1 && (
-          <button
-            onClick={nextPage}
-            className="py-1 px-3 text-white rounded-full"
-            aria-label="next-page"
-          >
-            Note
-          </button>
-        )}
+        <button
+          onClick={nextPage}
+          className="py-1 px-3 text-white rounded-full"
+          aria-label="next-page"
+        >
+          {courseId === -1 ? "Links" : "Notes"}
+        </button>
       </div>
       <Dropdown>
         <DropdownTrigger>

@@ -7,7 +7,7 @@ import { CourseIdContext } from "./contexts/courseId";
 import AddLinkPage from "./pages/add_link";
 
 function App() {
-  const PAGES = ["filter", "course_note", "links"];
+  const NUMBER_OF_PAGE = 3;
   const [courseId, setCourseId] = useState<number>(-1);
   const [currentPage, setCurrentPage] = useState<number>(2);
 
@@ -21,12 +21,11 @@ function App() {
   }, [courseId]);
 
   const _nextPage = () => {
-    const n = PAGES.length;
-    let nextPageIndex = (currentPage + 1) % n;
-    if (nextPageIndex === 1 && courseId === -1) {
-      nextPageIndex = (currentPage + 1) % n;
+    if (currentPage === 0 && courseId === -1) {
+      setCurrentPage(2);
+    } else {
+      setCurrentPage((currentPage + 1) % NUMBER_OF_PAGE);
     }
-    setCurrentPage(nextPageIndex);
   };
 
   const _renderCurrentPage = () => {
