@@ -1,12 +1,10 @@
 import { Input } from "@nextui-org/react";
 import { FormEventHandler, useState } from "react";
+import { useNextPageContext } from "../contexts/nextPage";
 
-interface Props {
-  nextPage: () => void;
-}
-
-const AddLinkPage = ({ nextPage }: Props) => {
+const AddLinkPage = () => {
   const [links, setLinks] = useState<{ title: string; url: string }[]>([]);
+  const nextPage = useNextPageContext();
 
   const _onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();

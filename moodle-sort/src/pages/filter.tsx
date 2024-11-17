@@ -17,16 +17,15 @@ import {
   storageKeys,
 } from "../storage/cloud";
 import { useCourseIdContext } from "../contexts/courseId";
+import { useNextPageContext } from "../contexts/nextPage";
 
-interface Props {
-  nextPage: () => void;
-}
-
-const FilterPage = ({ nextPage }: Props) => {
+const FilterPage = () => {
   const [year, setYear] = useState<number | null>(null);
   const [sem, setSem] = useState<number | null>(null);
   const [prefixes, setPrefixes] = useState<string>("");
   const [mustContain, setMustContain] = useState<string>("");
+
+  const nextPage = useNextPageContext();
 
   useEffect(() => {
     initFliterStateFromCloud((result) => {

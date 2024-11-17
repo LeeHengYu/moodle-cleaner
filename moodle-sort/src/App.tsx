@@ -6,6 +6,7 @@ import AddLinkPage from "./pages/add_link";
 import CourseNotePage from "./pages/course_note";
 import FilterPage from "./pages/filter";
 import { initializeUserId } from "./service/user_id";
+import { NextPageContext } from "./contexts/nextPage";
 
 function App() {
   const NUMBER_OF_PAGE = 3;
@@ -30,11 +31,11 @@ function App() {
   const _renderCurrentPage = () => {
     switch (currentPage) {
       case 0:
-        return <FilterPage nextPage={_nextPage} />;
+        return <FilterPage />;
       case 1:
-        return <CourseNotePage nextPage={_nextPage} />;
+        return <CourseNotePage />;
       case 2:
-        return <AddLinkPage nextPage={_nextPage} />;
+        return <AddLinkPage />;
       default:
         return <div>Error Loading Extension...</div>;
     }
@@ -43,9 +44,11 @@ function App() {
   initializeUserId().then((id) => setUserId(id));
 
   return (
-    <CourseIdContext.Provider value={courseId}>
-      <div className="flex flex-col w-[400px]">{_renderCurrentPage()}</div>
-    </CourseIdContext.Provider>
+    <NextPageContext.Provider value={_nextPage}>
+      <CourseIdContext.Provider value={courseId}>
+        <div className="flex flex-col w-[400px]">{_renderCurrentPage()}</div>
+      </CourseIdContext.Provider>
+    </NextPageContext.Provider>
   );
 }
 

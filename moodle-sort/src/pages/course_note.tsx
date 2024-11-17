@@ -5,14 +5,12 @@ import {
   getCourseNoteFromCloud,
   saveCourseNoteToCloud,
 } from "../storage/cloud";
+import { useNextPageContext } from "../contexts/nextPage";
 
-interface Props {
-  nextPage: () => void;
-}
-
-const CourseNotePage = ({ nextPage }: Props) => {
+const CourseNotePage = () => {
   const [input, setInput] = useState<string>("");
   const courseId = useCourseIdContext();
+  const nextPage = useNextPageContext();
 
   const handleInputChange = (v: string) => {
     setInput(v);
