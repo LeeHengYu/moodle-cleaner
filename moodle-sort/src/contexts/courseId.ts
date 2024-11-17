@@ -1,8 +1,7 @@
 import { createContext, useContext } from "react";
 
-export const CourseIdContext = createContext<number | undefined>(undefined);
+export const CourseIdContext = createContext<number>(-1); // default value doesn't matter
 
 export const useCourseIdContext = () => {
-  const courseId = useContext(CourseIdContext);
-  return courseId === undefined ? -1 : courseId;
+  return useContext(CourseIdContext);
 };

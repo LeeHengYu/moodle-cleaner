@@ -28,8 +28,6 @@ const FilterPage = ({ nextPage }: Props) => {
   const [prefixes, setPrefixes] = useState<string>("");
   const [mustContain, setMustContain] = useState<string>("");
 
-  const courseId = useCourseIdContext();
-
   useEffect(() => {
     initFliterStateFromCloud((result) => {
       setYear(result.year || null);
@@ -38,6 +36,8 @@ const FilterPage = ({ nextPage }: Props) => {
       setMustContain(result.mustContain || "");
     });
   }, []); // wrap them into zustand
+
+  const courseId = useCourseIdContext();
 
   const convertYear = (y: number): string => {
     const endYear = (y + 1).toString().slice(2);
@@ -87,14 +87,6 @@ const FilterPage = ({ nextPage }: Props) => {
     }
   };
 
-  const clearAll = () => {
-    setYear(null);
-    setSem(null);
-    setPrefixes("");
-    setMustContain("");
-    chrome.storage.sync.remove(storageKeys);
-  };
-
   const handlePrefixesChange = (v: string) => {
     setPrefixes(v);
     saveParamToCloud(STORAGE_KEY_FILTER_PREFIX, v);
@@ -103,6 +95,14 @@ const FilterPage = ({ nextPage }: Props) => {
   const handleMustContainChange = (v: string) => {
     setMustContain(v);
     saveParamToCloud(STORAGE_KEY_MUST_CONTAIN, v);
+  };
+
+  const clearAll = () => {
+    setYear(null);
+    setSem(null);
+    setPrefixes("");
+    setMustContain("");
+    chrome.storage.sync.remove(storageKeys);
   };
 
   return (
