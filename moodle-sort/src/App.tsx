@@ -9,15 +9,12 @@ import AddLinkPage from "./pages/add_link";
 function App() {
   const NUMBER_OF_PAGE = 3;
   const [courseId, setCourseId] = useState<number>(-1);
-  const [currentPage, setCurrentPage] = useState<number>(2);
+  const [currentPage, setCurrentPage] = useState<number>(0);
 
   useEffect(() => {
     getCourseIdFromBroswer().then((id) => {
       setCourseId(id);
     });
-    if (courseId !== -1) {
-      setCurrentPage(1);
-    }
   }, [courseId]);
 
   const _nextPage = () => {
