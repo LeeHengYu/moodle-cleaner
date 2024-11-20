@@ -6,26 +6,24 @@ let param_must_contain = "";
 let param_sem = null;
 let param_year = null;
 
-chrome.storage.sync.get(["prefixes", "mustContain", "sem", "year"], (res) => {
-  param_filtered_prefix = res.prefixes || "";
-  param_must_contain = res.mustContain || "";
-
-  if ("year" in res) {
+await chrome.storage.sync.get(
+  ["prefixes", "mustContain", "sem", "year"],
+  (res) => {
     param_year = res.year;
-  }
-  if ("sem" in res) {
     param_sem = res.sem;
+    param_filtered_prefix = res.prefixes || "";
+    param_must_contain = res.mustContain || "";
   }
+);
 
-  init(param_year, param_sem);
-});
+init();
 
-function init(year = null, sem = null) {
-  if (document.getElementById("frontpage-course-list")) {
-    selectSem(year, sem);
+function init() {
+  if (document.getElementById("frontpage-course-list") !== null) {
+    selectSem(param_year, param_sem);
   }
   createAboutButton();
-  if (year && sem) {
+  if (param_year && param_sem) {
     createCourseLinksFromStorage();
   }
 }
@@ -86,7 +84,7 @@ function createCourseLinksFromStorage() {
       const link = document.createElement("a");
       link.className = "nav-link";
       link.href = course.url;
-      link.style.color = "#000000 !important";
+      link.style.color = "#000000";
       link.setAttribute("role", "menuitem");
       link.setAttribute("tabindex", -1);
       link.textContent = course.code;
