@@ -42,3 +42,5 @@ export const addLink = async (
 export const deleteLink = async (userId: string, linkId: string) => {
   await deleteDoc(doc(db, "users", userId, "links", linkId));
 };
+
+export const TEST_USER_ID = "w7S884OoaLdD5F889JhT";

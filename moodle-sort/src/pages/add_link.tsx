@@ -1,29 +1,66 @@
 import { Input } from "@nextui-org/react";
-import { FormEventHandler, useState } from "react";
+import { FormEventHandler, useEffect, useState } from "react";
 import { useNextPageContext } from "../contexts/nextPage";
-import { LinkModel } from "../service/firebase_hooks";
+import {
+  addLink,
+  deleteLink,
+  getUserLinks,
+  LinkModel,
+  TEST_USER_ID,
+} from "../service/firebase_hooks";
 import LinkBar from "../components/link_bar";
 
 const AddLinkPage = () => {
-  const [links, setLinks] = useState<LinkModel[]>([
-    { id: "test1", title: "Google", url: "https://google.com/" },
-    { id: "test2", title: "Google Maps", url: "https://google.com/maps" },
-  ]);
   const nextPage = useNextPageContext();
 
-  const _onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+  const [links, setLinks] = useState<LinkModel[]>([]);
+
+  useEffect(() => {
+    const fetchLinks = async () => {
+      try {
+        const res = await getUserLinks(TEST_USER_ID);
+        setLinks(res);
+      } catch (e) {
+        console.error("Failed to fetch links:", e);
+      }
+    };
+    fetchLinks();
+  }, []);
+
+  const isValidUrl = (url: string) => {
+    try {
+      return Boolean(new URL(url));
+    } catch (e) {
+      return false;
+    }
+  };
+
+  const _onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
     const title = formData.get("title") as string;
     const url = formData.get("url") as string;
 
-    setLinks((prevLinks) => [...prevLinks, { id: "test", title, url }]);
     e.currentTarget.reset();
+
+    if (title.length === 0 || !isValidUrl(url)) return; // show error message
+
+    try {
+      const docId = await addLink(TEST_USER_ID, title, url);
+      setLinks((prevLinks) => [...prevLinks, { id: docId, title, url }]);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const _handleDelete = (id: string) => {
-    setLinks((prevLinks) => prevLinks.filter((link) => link.id !== id));
+    try {
+      deleteLink(TEST_USER_ID, id);
+      setLinks((prevLinks) => prevLinks.filter((link) => link.id !== id));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (

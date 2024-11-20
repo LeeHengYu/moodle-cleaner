@@ -6,25 +6,11 @@ import {
   getCourseNoteFromCloud,
   saveCourseNoteToCloud,
 } from "../storage/cloud";
-import { getUserLinkFiles } from "../service/firebase_hooks";
 
 const CourseNotePage = () => {
   const [input, setInput] = useState<string>("");
   const courseId = useCourseIdContext();
   const nextPage = useNextPageContext();
-
-  const fetchLinks = async () => {
-    try {
-      const res = await getUserLinkFiles("w7S884OoaLdD5F889JhT");
-      setInput(res[0].title + res[1].title);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    fetchLinks();
-  }, []);
 
   const handleInputChange = (v: string) => {
     setInput(v);
