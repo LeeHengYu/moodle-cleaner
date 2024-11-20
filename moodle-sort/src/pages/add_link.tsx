@@ -5,7 +5,10 @@ import { LinkModel } from "../service/firebase_hooks";
 import LinkBar from "../components/link_bar";
 
 const AddLinkPage = () => {
-  const [links, setLinks] = useState<LinkModel[]>([]);
+  const [links, setLinks] = useState<LinkModel[]>([
+    { id: "test1", title: "Google", url: "https://google.com/" },
+    { id: "test2", title: "Google Maps", url: "https://google.com/maps" },
+  ]);
   const nextPage = useNextPageContext();
 
   const _onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
@@ -17,6 +20,10 @@ const AddLinkPage = () => {
 
     setLinks((prevLinks) => [...prevLinks, { id: "test", title, url }]);
     e.currentTarget.reset();
+  };
+
+  const _handleDelete = (id: string) => {
+    setLinks((prevLinks) => prevLinks.filter((link) => link.id !== id));
   };
 
   return (
@@ -52,7 +59,7 @@ const AddLinkPage = () => {
       <div className="mt-6">
         <h2 className="text-lg font-semibold">Added Links:</h2>
         {links.map((link) => (
-          <LinkBar link={link} />
+          <LinkBar link={link} handleDelete={_handleDelete} />
         ))}
       </div>
     </div>

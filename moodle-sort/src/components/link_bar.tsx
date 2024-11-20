@@ -2,13 +2,10 @@ import { LinkModel } from "../service/firebase_hooks";
 
 interface Props {
   link: LinkModel;
+  handleDelete: (id: string) => void;
 }
 
-const LinkBar = ({ link }: Props) => {
-  const onDelete = (id: string) => {
-    console.log(`delete ${id}`);
-  }; // implement db write in
-
+const LinkBar = ({ link, handleDelete }: Props) => {
   return (
     <div className="flex items-center justify-between w-full">
       <a
@@ -21,7 +18,7 @@ const LinkBar = ({ link }: Props) => {
         {link.title}
       </a>
       <button
-        onClick={() => onDelete(link.id)}
+        onClick={() => handleDelete(link.id)}
         aria-label="Delete link"
         className="bg-transparent text-md font-bold p-2 hover:bg-red-100 rounded"
       >
