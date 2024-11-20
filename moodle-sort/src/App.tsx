@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { getCourseIdFromBroswer } from "./browser/tab";
 import { CourseIdContext } from "./contexts/courseId";
+import { NextPageContext } from "./contexts/nextPage";
 import AddLinkPage from "./pages/add_link";
 import CourseNotePage from "./pages/course_note";
 import FilterPage from "./pages/filter";
 import { initializeUserId } from "./service/user_id";
-import { NextPageContext } from "./contexts/nextPage";
 
 function App() {
   const NUMBER_OF_PAGE = 3;

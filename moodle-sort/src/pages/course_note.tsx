@@ -1,16 +1,30 @@
 import { useEffect, useState } from "react";
 import InputForm from "../components/input_form";
 import { useCourseIdContext } from "../contexts/courseId";
+import { useNextPageContext } from "../contexts/nextPage";
 import {
   getCourseNoteFromCloud,
   saveCourseNoteToCloud,
 } from "../storage/cloud";
-import { useNextPageContext } from "../contexts/nextPage";
+import { getUserLinkFiles } from "../service/firebase_hooks";
 
 const CourseNotePage = () => {
   const [input, setInput] = useState<string>("");
   const courseId = useCourseIdContext();
   const nextPage = useNextPageContext();
+
+  const fetchLinks = async () => {
+    try {
+      const res = await getUserLinkFiles("w7S884OoaLdD5F889JhT");
+      setInput(res[0].title + res[1].title);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchLinks();
+  }, []);
 
   const handleInputChange = (v: string) => {
     setInput(v);
