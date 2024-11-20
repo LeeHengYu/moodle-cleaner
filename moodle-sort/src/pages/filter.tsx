@@ -1,5 +1,4 @@
 import {
-  Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -7,6 +6,8 @@ import {
 } from "@nextui-org/react";
 import { Key, useEffect, useState } from "react";
 import InputForm from "../components/input_form";
+import { useCourseIdContext } from "../contexts/courseId";
+import { useNextPageContext } from "../contexts/nextPage";
 import {
   initFliterStateFromCloud,
   saveParamToCloud,
@@ -16,8 +17,6 @@ import {
   STORAGE_KEY_YEAR,
   storageKeys,
 } from "../storage/cloud";
-import { useCourseIdContext } from "../contexts/courseId";
-import { useNextPageContext } from "../contexts/nextPage";
 
 const FilterPage = () => {
   const [year, setYear] = useState<number | null>(null);
@@ -26,6 +25,8 @@ const FilterPage = () => {
   const [mustContain, setMustContain] = useState<string>("");
 
   const nextPage = useNextPageContext();
+  const textBorderClassName =
+    "w-full max-w-sm p-2 text-md text-center border-2 border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500";
 
   useEffect(() => {
     initFliterStateFromCloud((result) => {
@@ -125,9 +126,9 @@ const FilterPage = () => {
       </div>
       <Dropdown>
         <DropdownTrigger>
-          <Button variant="bordered">
+          <p className={textBorderClassName}>
             {typeof year == "number" ? convertYear(year) : "All Years"}
-          </Button>
+          </p>
         </DropdownTrigger>
         <DropdownMenu onAction={handleYearChange}>
           {getAyOptions().map((option) => (
@@ -137,7 +138,7 @@ const FilterPage = () => {
       </Dropdown>
       <Dropdown>
         <DropdownTrigger>
-          <Button variant="bordered">{sem || "All Semesters"}</Button>
+          <p className={textBorderClassName}>{sem || "All Semesters"}</p>
         </DropdownTrigger>
         <DropdownMenu onAction={handleSemChange}>
           <DropdownItem key="all">All</DropdownItem>
