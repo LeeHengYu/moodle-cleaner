@@ -1,9 +1,11 @@
 import { Input } from "@nextui-org/react";
 import { FormEventHandler, useState } from "react";
 import { useNextPageContext } from "../contexts/nextPage";
+import { LinkModel } from "../service/firebase_hooks";
+import LinkBar from "../components/link_bar";
 
 const AddLinkPage = () => {
-  const [links, setLinks] = useState<{ title: string; url: string }[]>([]);
+  const [links, setLinks] = useState<LinkModel[]>([]);
   const nextPage = useNextPageContext();
 
   const _onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
@@ -13,7 +15,7 @@ const AddLinkPage = () => {
     const title = formData.get("title") as string;
     const url = formData.get("url") as string;
 
-    setLinks((prevLinks) => [...prevLinks, { title, url }]);
+    setLinks((prevLinks) => [...prevLinks, { id: "test", title, url }]);
     e.currentTarget.reset();
   };
 
@@ -49,20 +51,9 @@ const AddLinkPage = () => {
       <div className="h-4 w-full" />
       <div className="mt-6">
         <h2 className="text-lg font-semibold">Added Links:</h2>
-        <ul className="list-disc ml-5">
-          {links.map((link, index) => (
-            <li key={index}>
-              <a
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline text-xl font-bold"
-              >
-                {link.title}
-              </a>
-            </li>
-          ))}
-        </ul>
+        {links.map((link) => (
+          <LinkBar link={link} />
+        ))}
       </div>
     </div>
   );

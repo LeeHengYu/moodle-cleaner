@@ -7,7 +7,7 @@ import {
 } from "firebase/firestore";
 import db from "./firebase";
 
-interface LinkModel {
+export interface LinkModel {
   id: string;
   title: string;
   url: string;
