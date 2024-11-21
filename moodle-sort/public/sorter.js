@@ -6,6 +6,11 @@ let param_must_contain = "";
 let param_sem = null;
 let param_year = null;
 
+const SAMPLE_LINKS = [
+  { id: 1, title: "Google", url: "https://google.com/" },
+  { id: 2, title: "Google Maps", url: "https://google.com/maps/" },
+];
+
 chrome.storage.sync.get(["prefixes", "mustContain", "sem", "year"], (res) => {
   param_filtered_prefix = res.prefixes || "";
   param_must_contain = res.mustContain || "";
@@ -19,6 +24,8 @@ chrome.storage.sync.get(["prefixes", "mustContain", "sem", "year"], (res) => {
 
   init(param_year, param_sem);
 });
+
+injectLinks(SAMPLE_LINKS);
 
 function init(year = null, sem = null) {
   if (document.getElementById("frontpage-course-list")) {
@@ -203,4 +210,38 @@ function selectSem(year, sem) {
   saveCoursesToStorage(resCourses);
 
   return filteredCourses;
+}
+
+function injectLinks(links) {
+  const targetDiv = document.querySelector(".courseheaderimage");
+  if (!targetDiv || links.length === 0) return;
+
+  const container = document.createElement("div");
+  container.style.display = "flex";
+  container.style.flexDirection = "column";
+  container.style.gap = "6px";
+  container.style.marginTop = "24px";
+
+  const header = document.createElement("h3");
+  header.textContent = "Custom Link";
+  container.appendChild(header);
+
+  links.forEach((link) => {
+    const wrapper = document.createElement("div");
+    wrapper.style.border = "1px solid #ccc";
+    wrapper.style.padding = "8px";
+    wrapper.style.borderRadius = "4px";
+    wrapper.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
+
+    const anchor = document.createElement("a");
+    anchor.className = "courseindex-link nav-link";
+    anchor.href = link.url;
+    anchor.textContent = link.title;
+    anchor.target = "_blank";
+
+    wrapper.appendChild(anchor);
+    container.appendChild(wrapper);
+  });
+
+  targetDiv.parentNode.insertBefore(container, targetDiv);
 }
