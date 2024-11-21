@@ -42,6 +42,11 @@ export const getUserLinks = async (
           url: data.url,
         });
     });
+
+    links.sort((a, b) =>
+      a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+    );
+
     return links;
   } catch (e) {
     return [];
