@@ -9,6 +9,7 @@ import {
   TEST_USER_ID,
 } from "../service/firebase_hooks";
 import LinkBar from "../components/link_bar";
+import { sendLinksToContentScript } from "../browser/custom_link_injection";
 
 const AddLinkPage = () => {
   const nextPage = useNextPageContext();
@@ -20,6 +21,7 @@ const AddLinkPage = () => {
       try {
         const res = await getUserLinks(TEST_USER_ID);
         setLinks(res);
+        sendLinksToContentScript(res);
       } catch (e) {
         console.error("Failed to fetch links:", e);
       }

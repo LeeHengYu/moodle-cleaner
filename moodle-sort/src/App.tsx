@@ -8,10 +8,17 @@ import CourseNotePage from "./pages/course_note";
 import FilterPage from "./pages/filter";
 import { initializeUserId } from "./service/user_id";
 
+chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
+  if (message.type === "CLOSE_POPUP") {
+    window.close();
+    sendResponse({ status: "success", message: "Popup closed" });
+  }
+});
+
 function App() {
   const NUMBER_OF_PAGE = 3;
   const [courseId, setCourseId] = useState<number>(-1);
-  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(2);
   const [, setUserId] = useState<string>("");
 
   useEffect(() => {

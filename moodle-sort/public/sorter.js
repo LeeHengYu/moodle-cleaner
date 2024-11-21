@@ -6,10 +6,7 @@ let param_must_contain = "";
 let param_sem = null;
 let param_year = null;
 
-const SAMPLE_LINKS = [
-  { id: 1, title: "Google", url: "https://google.com/" },
-  { id: 2, title: "Google Maps", url: "https://google.com/maps/" },
-];
+openAndClosePopup();
 
 chrome.storage.sync.get(["prefixes", "mustContain", "sem", "year"], (res) => {
   param_filtered_prefix = res.prefixes || "";
@@ -25,7 +22,15 @@ chrome.storage.sync.get(["prefixes", "mustContain", "sem", "year"], (res) => {
   init(param_year, param_sem);
 });
 
-injectLinks(SAMPLE_LINKS);
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // link fields: id, title, url
+  if (message.type === "INJECT_LINKS" && Array.isArray(message.links)) {
+    injectLinks(message.links);
+    sendResponse({ status: "success", message: "Links injected successfully" });
+  } else {
+    sendResponse({ status: "error", message: "Invalid data format" });
+  }
+});
 
 function init(year = null, sem = null) {
   if (document.getElementById("frontpage-course-list")) {
@@ -214,9 +219,11 @@ function selectSem(year, sem) {
 
 function injectLinks(links) {
   const targetDiv = document.querySelector(".courseheaderimage");
-  if (!targetDiv || links.length === 0) return;
+  if (links.length === 0 || document.getElementById("customlink-container"))
+    return;
 
   const container = document.createElement("div");
+  container.id = "customlink-container";
   container.style.display = "flex";
   container.style.flexDirection = "column";
   container.style.gap = "6px";
@@ -244,4 +251,18 @@ function injectLinks(links) {
   });
 
   targetDiv.parentNode.insertBefore(container, targetDiv);
+}
+
+function openAndClosePopup() {
+  if (!document.querySelector(".courseheaderimage")) return;
+  chrome.runtime.sendMessage({ type: "OPEN_POPUP" }, (response) => {
+    if (chrome.runtime.lastError) {
+      console.error(
+        "Error communicating with background script:",
+        chrome.runtime.lastError
+      );
+    } else {
+      console.log("Background script response:", response);
+    }
+  });
 }
