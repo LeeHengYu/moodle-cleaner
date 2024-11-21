@@ -2,45 +2,40 @@
 
 This project aims to resolve currently terrible UX of HKU Moodle page. Currently there is no method for user to adjust the contents of the page without resorting to JavaScript plug-in.
 
-# To-do issues
+# Features
 
-1. Some one-sem courses only has regex pattern `[year]` in course text, considering hinting user to add the course to inclusion list.
-
-# How to use Moodle Cleaner?
-
-For v1.0.\*, Moodle Cleaner provides basic custom filter configurations that fit most use cases.
+On v1.1.0, Cleaner provides sorting, filtering, course-specific notes and custom links embedding.
 
 ## Sorting
 
 The course list is now sorted in lexicographic order under all cases.
 
-## Filtering by academic year and semester
+## Filtering
 
-User can filter the courses they want to see by providing which (academic) year and which semester of courses to render. They can also provide course code prefixes such as `COMP` or `FINA`. If both `year` and `sem` are not provided, or only `sem` is provided, no filtering is performed.
+User can filter the courses they want to see by providing which (academic) year and which semester of courses to keep. They can also provide course code prefixes such as `COMP` or `FINA` to filter further. To filter, the user must provide `year`.
 
 If user only provides `year`, the Cleaner looks for the course text that has `year` inside. For example, if user enters 2024, "COMP3297 Software engineering [Section 1A, 2024]" will be selected.
 
 If user provides both `year` and `sem`, the Cleaner looks for the pattern "Section \<sem\>X" or "Section FA" to match. Only semester 1 and 2 are now supported.
 
-## Filtering by course (title) prefixes
-
-User can enter the prefixes they want to see by entering prefixes, delimited by semi-colons (;). For example, if the user only wants to see ECON and FINA level 3 courses, they should type in `FINA3; ECON`. If the user leaves this blank, the Cleaner does nothing.
+User can enter the course code prefixes to keep delimited by semi-colons (;). For example, if the user only wants to see ECON and FINA level 3 courses, they should type in `ECON; FINA3`. This field is optional.
 
 ## Some courses not being picked up or want to include some other utility moodle page?
 
-User can provide texts (substrings) that exist in the course title, the Cleaner will look for the strings and keep them on the page. Users need to provide a (ideally short) text to as the identifier of the course, which will be used as the text of the navigation button on the nav bar. (See next section for this feature)
+User can provide texts (substrings) that exist in the course title. Cleaner looks for these strings and keep them on the page. Users need to provide a (ideally short) title to as the identifier of the course, which will be used as the text of the navigation button on the nav bar.
 
-For example, if the user typed in "CUND9003/Cantonese", the Cleaner will pick up any course that has CUND9003 in the course title, and the button on top will display "Cantonese" instead of the course code. You can provide more than one condition, delimited by semi-colons (;).
+For example, if the user typed in "CUND9003/Canton", the Cleaner will pick up any course that has CUND9003 in the course title, and the button on top will display "Canton" instead of the course code. You can provide more than one condition, delimited by semi-colons (;). This can override the filtering results.
 
 ## Hyperlinks on the nav bar
 
-If the user provides both year and sem params, corresponding hyperlinks to the filtered courses will be rendered on the top nav bar. Whenever users stay on `moodle.hku.hk` webpages, users can directly navigate to other pages without going back to home.
+If the user provides both `year` and `sem` for filtering, corresponding hyperlinks to the filtered courses will be rendered on the top nav bar. Whenever users stay on `moodle.hku.hk` webpages, users can directly navigate to other pages through them.
 
-## Cloud Sync
+# Cloud Sync
 
-The user configuration will be saved to cloud linked to your Google account, and will be synced across devices logged in with the same Google account. Therefore even when the user is not logged in with their Moodle account, they can still click on the button => redirect to authenticate => land on the course page they want.
+We store the user information in 2 different cloud storage spaces. Users do not need to reconfigure their Cleaner when switching the device.
 
-Please be aware that there is a 300ms debouncer for every field in the popup, so please wait a little while for the setting to be saved to the cloud.
+1. Chrome sync storage: this is connected to the signed-in Google account of the chrome browser. In this storage, we stored filter parameters, course notes, userId for Firestore database querying.
+2. Firestore is storing course-specific links for all the users.
 
 # Privacy Policy
 
@@ -70,7 +65,7 @@ HKU ITS removes the side bar navigation hyperlinks to other course pages in all 
 
 ## Progress
 
-v1.0.2 released on Sep. 29 to change the input to dropdown lists.
+v1.1.0 introduces multiple new features and serves as the demo version for capstone project.
 
 ## Pull Requests
 
