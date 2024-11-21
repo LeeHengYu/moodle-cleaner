@@ -6,26 +6,33 @@ import {
   deleteLink,
   getUserLinks,
   LinkModel,
-  TEST_USER_ID,
 } from "../service/firebase_hooks";
 import LinkBar from "../components/link_bar";
 import { sendLinksToContentScript } from "../browser/custom_link_injection";
+import { initializeUserId } from "../service/user_id";
 
 const AddLinkPage = () => {
   const nextPage = useNextPageContext();
 
   const [links, setLinks] = useState<LinkModel[]>([]);
+  const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
+    const fetchUserId = async () => {
+      const res = await initializeUserId();
+      setUserId(res);
+      return res;
+    };
     const fetchLinks = async () => {
       try {
-        const res = await getUserLinks(TEST_USER_ID);
+        const res = await getUserLinks(await fetchUserId());
         setLinks(res);
         sendLinksToContentScript(res);
       } catch (e) {
         console.error("Failed to fetch links:", e);
       }
     };
+
     fetchLinks();
   }, []);
 
@@ -41,15 +48,18 @@ const AddLinkPage = () => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const title = formData.get("title") as string;
-    const url = formData.get("url") as string;
+    let title = formData.get("title") as string;
+    let url = formData.get("url") as string;
 
     e.currentTarget.reset();
+
+    title = title.trim();
+    url = url.trim();
 
     if (title.length === 0 || !isValidUrl(url)) return; // show error message
 
     try {
-      const docId = await addLink(TEST_USER_ID, title, url);
+      const docId = await addLink(userId, title, url);
       setLinks((prevLinks) => [...prevLinks, { id: docId, title, url }]);
     } catch (e) {
       console.log(e);
@@ -58,7 +68,7 @@ const AddLinkPage = () => {
 
   const _handleDelete = (id: string) => {
     try {
-      deleteLink(TEST_USER_ID, id);
+      deleteLink(userId, id);
       setLinks((prevLinks) => prevLinks.filter((link) => link.id !== id));
     } catch (e) {
       console.log(e);
@@ -96,7 +106,7 @@ const AddLinkPage = () => {
       </form>
       <div className="h-4 w-full" />
       <div className="mt-6">
-        <h2 className="text-lg font-semibold">Added Links:</h2>
+        <h2 className="text-lg font-semibold">{`Added Links:`}</h2>
         {links.map((link) => (
           <LinkBar link={link} handleDelete={_handleDelete} />
         ))}
