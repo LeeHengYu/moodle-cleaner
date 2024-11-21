@@ -10,12 +10,14 @@ import {
 import LinkBar from "../components/link_bar";
 import { sendLinksToContentScript } from "../browser/custom_link_injection";
 import { initializeUserId } from "../service/user_id";
+import { useCourseIdContext } from "../contexts/courseId";
 
 const AddLinkPage = () => {
   const nextPage = useNextPageContext();
 
   const [links, setLinks] = useState<LinkModel[]>([]);
   const [userId, setUserId] = useState<string>("");
+  const courseId = useCourseIdContext();
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -25,7 +27,7 @@ const AddLinkPage = () => {
     };
     const fetchLinks = async () => {
       try {
-        const res = await getUserLinks(await fetchUserId());
+        const res = await getUserLinks(await fetchUserId(), courseId);
         setLinks(res);
         sendLinksToContentScript(res);
       } catch (e) {
@@ -34,7 +36,7 @@ const AddLinkPage = () => {
     };
 
     fetchLinks();
-  }, []);
+  }, [courseId]);
 
   const isValidUrl = (url: string) => {
     try {
@@ -59,7 +61,7 @@ const AddLinkPage = () => {
     if (title.length === 0 || !isValidUrl(url)) return; // show error message
 
     try {
-      const docId = await addLink(userId, title, url);
+      const docId = await addLink(userId, courseId, title, url);
       setLinks((prevLinks) => [...prevLinks, { id: docId, title, url }]);
     } catch (e) {
       console.log(e);

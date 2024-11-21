@@ -15,7 +15,10 @@ export interface LinkModel {
   url: string;
 }
 
-export const getUserLinks = async (userId: string): Promise<LinkModel[]> => {
+export const getUserLinks = async (
+  userId: string,
+  courseId: number
+): Promise<LinkModel[]> => {
   const userDocRef = doc(db, "users", userId);
 
   try {
@@ -32,11 +35,12 @@ export const getUserLinks = async (userId: string): Promise<LinkModel[]> => {
     const links: LinkModel[] = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      links.push({
-        id: doc.id,
-        title: data.title,
-        url: data.url,
-      });
+      if (data.courseId === courseId)
+        links.push({
+          id: doc.id,
+          title: data.title,
+          url: data.url,
+        });
     });
     return links;
   } catch (e) {
@@ -46,10 +50,12 @@ export const getUserLinks = async (userId: string): Promise<LinkModel[]> => {
 
 export const addLink = async (
   userId: string,
+  courseId: number,
   title: string,
   url: string
 ): Promise<string> => {
   const docRef = await addDoc(collection(db, "users", userId, "links"), {
+    courseId,
     title,
     url,
   });
