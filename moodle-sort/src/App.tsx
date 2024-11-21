@@ -24,23 +24,20 @@ function App() {
   useEffect(() => {
     getCourseIdFromBroswer().then((id) => {
       setCourseId(id);
+      if (id === -1) setCurrentPage(1);
     });
-  }, [courseId]);
+  }, []);
 
   const _nextPage = () => {
-    if (currentPage === 0 && courseId === -1) {
-      setCurrentPage(2);
-    } else {
-      setCurrentPage((currentPage + 1) % NUMBER_OF_PAGE);
-    }
+    setCurrentPage((currentPage + 1) % NUMBER_OF_PAGE);
   };
 
   const _renderCurrentPage = () => {
     switch (currentPage) {
       case 0:
-        return <FilterPage />;
-      case 1:
         return <CourseNotePage />;
+      case 1:
+        return <FilterPage />;
       case 2:
         return <AddLinkPage />;
       default:

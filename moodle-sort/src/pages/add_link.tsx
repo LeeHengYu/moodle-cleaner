@@ -84,7 +84,7 @@ const AddLinkPage = () => {
           className="py-1 px-3 text-white rounded-full"
           aria-label="next-page"
         >
-          Filter
+          Note
         </button>
       </div>
       <div className="h-4 w-full" />

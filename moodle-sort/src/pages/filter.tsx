@@ -116,13 +116,15 @@ const FilterPage = () => {
         >
           Clear All
         </button>
-        <button
-          onClick={nextPage}
-          className="py-1 px-3 text-white rounded-full"
-          aria-label="next-page"
-        >
-          {courseId === -1 ? "Links" : "Notes"}
-        </button>
+        {courseId !== -1 && (
+          <button
+            onClick={nextPage}
+            className="py-1 px-3 text-white rounded-full"
+            aria-label="next-page"
+          >
+            Links
+          </button>
+        )}
       </div>
       <Dropdown>
         <DropdownTrigger>

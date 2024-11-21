@@ -32,7 +32,7 @@ const CourseNotePage = () => {
           className="py-1 px-3 text-white rounded-full"
           aria-label="next-page"
         >
-          Links
+          Filter
         </button>
       </div>
       {courseId === -1 ? (
