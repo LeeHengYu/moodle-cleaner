@@ -5,7 +5,9 @@ import {
   doc,
   getDoc,
   getDocs,
+  query,
   setDoc,
+  where,
 } from "firebase/firestore";
 import db from "./firebase";
 
@@ -28,19 +30,19 @@ export const getUserLinks = async (
       await setDoc(userDocRef, { createdAt: new Date().toUTCString() });
       return [];
     }
-
+    const collectionRef = collection(db, "users", userId, "links");
     const querySnapshot = await getDocs(
-      collection(db, "users", userId, "links")
+      query(collectionRef, where("courseId", "==", courseId))
     );
+
     const links: LinkModel[] = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      if (data.courseId === courseId)
-        links.push({
-          id: doc.id,
-          title: data.title,
-          url: data.url,
-        });
+      links.push({
+        id: doc.id,
+        title: data.title,
+        url: data.url,
+      });
     });
 
     links.sort((a, b) =>
