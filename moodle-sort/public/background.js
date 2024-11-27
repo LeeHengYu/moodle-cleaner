@@ -9,7 +9,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         setTimeout(() => {
           chrome.runtime.sendMessage({ type: "CLOSE_POPUP" });
-        }, 300);
+        }, 500);
 
         sendResponse({
           status: "success",
