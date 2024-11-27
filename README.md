@@ -4,7 +4,7 @@ This project aims to resolve currently terrible UX of HKU Moodle page. Currently
 
 # Features
 
-On v1.1.0, Cleaner provides sorting, filtering, course-specific notes and custom links embedding.
+On v1.1, Cleaner provides sorting, filtering, course-specific notes and custom links embedding.
 
 ## Sorting
 
@@ -29,6 +29,14 @@ For example, if the user typed in "CUND9003/Canton", the Cleaner will pick up an
 ## Hyperlinks on the nav bar
 
 If the user provides both `year` and `sem` for filtering, corresponding hyperlinks to the filtered courses will be rendered on the top nav bar. Whenever users stay on `moodle.hku.hk` webpages, users can directly navigate to other pages through them.
+
+## Custom Links
+
+For each course, users can add any links they want via the popup form. Those links will be shown on the top of the main body part of the moodle page for users to better organize their learning materials. Under such circumstances, only filter page can be accessed in the popup.
+
+## About course page related features
+
+These features only work when the user is on `moodle.hku.hk/course/`, hence when users are on, say, forum or some resource, the feature may not be available.
 
 # Cloud Sync
 
@@ -64,6 +72,8 @@ _Aug. 18_
 HKU ITS removes the side bar navigation hyperlinks to other course pages in all `moodle.hku.hk/*` pages. Originally, the sidebar was used to fetch desired data, including course names and links to individual pages. The major features of this extension all rely on these. This also kills another extension called [HKU Moodle Helper](https://chromewebstore.google.com/detail/hku-moodle-helper/einenigpmpgopefpkfbmnlcjmoamijap).
 
 ## Progress
+
+v1.1.2 fixes the bugs when the user is on the source page of
 
 v1.1.0 introduces multiple new features and serves as the demo version for capstone project.
 
